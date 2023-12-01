@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Text, TextInput, Button } from "react-native-paper";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
 
-const HealthPage = () => {
+export default function HealthPage() {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [bmiResult, setBMIResult] = useState(null);
@@ -73,21 +73,27 @@ const HealthPage = () => {
 
   return (
     <>
-      <ScrollView>
-        <Text>Health Page</Text>
+      <ScrollView style={{ padding: 16 }}>
+        <Text style={styles.header}>Calculate your BMI</Text>
         <TextInput
+          style={styles.input}
           placeholder="Height (cm)"
           value={height}
           onChangeText={(text) => setHeight(text)}
           keyboardType="numeric"
         />
         <TextInput
+          style={styles.input}
           placeholder="Weight (kg)"
           value={weight}
           onChangeText={(text) => setWeight(text)}
           keyboardType="numeric"
         />
-        <Button title="Calculate BMI" onPress={calculateBMI}>
+        <Button
+          style={{ marginBottom: 16 }}
+          mode="contained"
+          title="Calculate BMI"
+          onPress={calculateBMI}>
           Calculate BMI
         </Button>
         {bmiResult && (
@@ -97,19 +103,42 @@ const HealthPage = () => {
           </>
         )}
 
-        <Text>History:</Text>
+        <Text style={styles.subheader}>Your Past BMI:</Text>
         {history.map((item, index) => (
           <View key={index}>
-            <Text>Date: {item.date}</Text>
-            <Text>Height: {item.height} cm</Text>
-            <Text>Weight: {item.weight} kg</Text>
-            <Text>BMI: {item.bmi}</Text>
-            <Text>Status: {item.status}</Text>
+            <Text style={styles.weightText}>Date: {item.date}</Text>
+            <Text style={styles.weightText}>Height: {item.height} cm</Text>
+            <Text style={styles.weightText}>Weight: {item.weight} kg</Text>
+            <Text style={styles.weightText}>BMI: {item.bmi}</Text>
+            <Text style={styles.weightText}>Status: {item.status}</Text>
           </View>
         ))}
       </ScrollView>
     </>
   );
-};
+}
 
-export default HealthPage;
+const styles = StyleSheet.create({
+  header: {
+    fontSize: 24,
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  input: {
+    flex: 1,
+    padding: 16,
+    fontSize: 16,
+    marginBottom: 16,
+  },
+  weightText: {
+    fontSize: 16,
+    fontWeight: "700",
+    marginBottom: 8,
+  },
+  subheader: {
+    marginBottom: 16,
+    color: "#888",
+    fontWeight: "400",
+    fontSize: 24,
+  },
+});

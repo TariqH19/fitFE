@@ -37,6 +37,8 @@ const WeightTracker = () => {
       ]);
       weightChartRef.current.updateChart();
 
+      setError("");
+
       saveWeightsToLocalStorage();
       return;
     }

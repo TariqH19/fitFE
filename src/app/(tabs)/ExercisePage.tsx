@@ -118,7 +118,7 @@ export default function ExercisePage() {
     <>
       <Stack.Screen options={{ headerTitle: `Exercises` }} />
       <ScrollView>
-        <View style={{ flex: 1, gap: 10 }}>
+        <View style={{ flex: 1, gap: 10, padding: 16 }}>
           <Button mode="contained" onPress={() => toggleModal(null)}>
             Add Exercise
           </Button>
@@ -157,6 +157,7 @@ export default function ExercisePage() {
 
           <Portal>
             <Modal
+              style={{ padding: 16 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
               <Card>

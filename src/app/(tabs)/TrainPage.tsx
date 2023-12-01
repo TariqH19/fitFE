@@ -119,7 +119,7 @@ export default function TrainPage() {
     <>
       <Stack.Screen options={{ headerTitle: `Session` }} />
       <ScrollView>
-        <View style={{ flex: 1, gap: 10 }}>
+        <View style={{ flex: 1, gap: 10, padding: 16 }}>
           <Button mode="contained" onPress={() => toggleModal(null)}>
             Add Session
           </Button>
@@ -154,6 +154,7 @@ export default function TrainPage() {
 
           <Portal>
             <Modal
+              style={{ padding: 16 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
               <Card>

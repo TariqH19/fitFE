@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, StyleSheet } from "react-native";
 import axios from "axios";
 import Constants from "expo-constants";
 import { useSession } from "../../contexts/AuthContext";
@@ -18,7 +18,6 @@ export default function ProfilePage() {
           decode(tokenArray[1].replace(/-/g, "+").replace(/_/g, "/"))
         );
         setData(decodedToken);
-        console.log(decodedToken);
 
         // Set the authorization header with the token
         axios.defaults.headers.common["Authorization"] = `Bearer ${session}`;
@@ -27,10 +26,28 @@ export default function ProfilePage() {
   }, [session]);
 
   return (
-    <View>
-      <Text>Hello {data.name}</Text>
-      <Text>Email: {data.email}</Text>
+    <View style={styles.container}>
+      <Text style={styles.greeting}>Hello {data.name.toUpperCase()}</Text>
+      <Text style={styles.email}>Email: {data.email}</Text>
       <Button title="Sign Out" onPress={signOut} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  email: {
+    fontSize: 16,
+    marginBottom: 16,
+  },
+});

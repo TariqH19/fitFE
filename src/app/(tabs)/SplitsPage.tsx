@@ -126,7 +126,7 @@ export default function SplitPage() {
     <>
       <Stack.Screen options={{ headerTitle: `Splits` }} />
       <ScrollView>
-        <View style={{ flex: 1, gap: 10 }}>
+        <View style={{ flex: 1, gap: 10, padding: 16 }}>
           <Button mode="contained" onPress={() => toggleModal(null)}>
             Add Split
           </Button>
@@ -176,6 +176,7 @@ export default function SplitPage() {
 
           <Portal>
             <Modal
+              style={{ padding: 16 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
               <Card>

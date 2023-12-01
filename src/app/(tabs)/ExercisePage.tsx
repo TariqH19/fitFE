@@ -55,8 +55,8 @@ export default function ExercisePage() {
       // Close the modal after editing
       setIsModalVisible(false);
       console.log("Exercise edited:", editedExercise);
-    } catch (error) {
-      // Handle the error (e.g., display an error message)
+    } catch (error: any) {
+      setError(error.response.data.errors.name.message);
       console.error("Error editing exercise:", error);
     }
   };
@@ -95,6 +95,7 @@ export default function ExercisePage() {
       });
     if (selectedExercise) {
       // If an exercise is selected for editing, set its values in the form
+      setError("");
       setForm({
         name: selectedExercise.name || "",
         muscle_group: selectedExercise.muscle_group || "",
@@ -103,6 +104,7 @@ export default function ExercisePage() {
       });
     } else {
       // If no exercise is selected, reset the form
+      setError("");
       setForm({
         name: "",
         muscle_group: "",

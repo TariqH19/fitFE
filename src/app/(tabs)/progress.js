@@ -14,6 +14,8 @@ const WeightTracker = () => {
   const weights = useRef([]);
   const weightChartRef = useRef(null);
   const weightInputRef = useRef(null);
+  const [error, setError] = useState("");
+  const [inputText, setInputText] = useState("");
   const [currentWeight, setCurrentWeight] = useState({ weight: 0 });
 
   useEffect(() => {
@@ -56,17 +58,18 @@ const WeightTracker = () => {
   }, [weights]);
 
   const addWeight = () => {
-    const inputText = weightInputRef.current;
-
     if (!inputText || isNaN(parseFloat(inputText))) {
-      alert("Please enter a valid weight.");
+      setError("Please enter a valid weight.");
       return;
     }
+
+    setError(""); // Clear the error if input is valid
 
     const newWeight = {
       weight: parseFloat(inputText),
       date: new Date().getTime(),
     };
+    setInputText("");
 
     weights.current.push(newWeight);
     setCurrentWeight({ weight: newWeight.weight });
@@ -106,12 +109,17 @@ const WeightTracker = () => {
             style={styles.input}
             keyboardType="numeric"
             placeholder={`Current Weight ${currentWeight.weight}`}
-            onChangeText={(text) => (weightInputRef.current = text)}
+            value={inputText}
+            onChangeText={(text) => setInputText(text)}
           />
+
           <Button onPress={addWeight} style={styles.button}>
             Add Weight
           </Button>
         </View>
+        {error && (
+          <Text style={{ color: "red", marginBottom: 12 }}>{error}</Text>
+        )}
 
         {weights.current.length > 0 && (
           <View>
@@ -206,14 +214,17 @@ const styles = StyleSheet.create({
     borderColor: "hwb(330 41% 0%)",
     margin: "auto",
     marginBottom: 16,
+    backgroundColor: "#6952A9",
+    alignSelf: "center",
   },
   currentWeight: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 8,
+    color: "#fff",
   },
   currentWeightLabel: {
-    color: "#888",
+    color: "#fff",
     fontStyle: "italic",
   },
   form: {
@@ -263,6 +274,11 @@ const styles = StyleSheet.create({
   dateText: {
     color: "#888",
     fontStyle: "italic",
+  },
+  button: {
+    padding: 8,
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import MultiSelect from "react-native-multiple-select";
 import { Stack } from "expo-router";
 import {
@@ -16,12 +16,14 @@ import UserInfo from "../../services/User";
 import DeleteBtn from "../../components/DeleteBtn";
 import axios from "axios";
 import { useSession } from "../../contexts/AuthContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function SplitPage() {
   const [split, setSplit] = useState([] as any);
   const [workouts, setWorkouts] = useState([] as any);
   const [selectedSplit, setSelectedSplit] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     workout: [] as any,
@@ -49,7 +51,6 @@ export default function SplitPage() {
         session
       );
 
-      setIsModalVisible(false);
       setSplit((prevSplits: any) =>
         prevSplits.map((split: any) =>
           split._id === selectedSplit._id ? editedSplit : split
@@ -59,9 +60,10 @@ export default function SplitPage() {
       // Close the modal after editing
       setIsModalVisible(false);
       console.log("Split edited:", editedSplit);
-    } catch (error) {
+    } catch (error: any) {
       // Handle the error (e.g., display an error message)
       console.error("Error editing split:", error);
+      setError(error.response.data.errors.name.message);
     }
   };
 
@@ -74,8 +76,8 @@ export default function SplitPage() {
       console.log("Split added:", addedSplit);
 
       // Reset the form or perform any other actions after successful submission
-    } catch (error) {
-      // Handle the error (e.g., display an error message)
+    } catch (error: any) {
+      setError(error.response.data.errors.name.message);
       console.error("Error adding split:", error);
     }
   };
@@ -97,6 +99,7 @@ export default function SplitPage() {
       });
     if (selectedSplit) {
       // If a split is selected for editing, set its values in the form
+      setError("");
       setForm({
         name: selectedSplit.name || "",
         workout: selectedSplit.workout || [],
@@ -107,6 +110,7 @@ export default function SplitPage() {
       });
     } else {
       // If no split is selected, reset the form
+      setError("");
       setForm({
         name: "",
         workout: [],
@@ -121,102 +125,115 @@ export default function SplitPage() {
   return (
     <>
       <Stack.Screen options={{ headerTitle: `Splits` }} />
-      <View style={{ flex: 1, gap: 10 }}>
-        <Button mode="contained" onPress={() => toggleModal(null)}>
-          Add Split
-        </Button>
+      <ScrollView>
+        <View style={{ flex: 1, gap: 10 }}>
+          <Button mode="contained" onPress={() => toggleModal(null)}>
+            Add Split
+          </Button>
 
-        {split.map((s: any) => (
-          <Card key={s._id}>
-            <Card.Content>
-              <Text>{s.name}</Text>
-              <Text>{s.notes}</Text>
+          {split.map((s: any) => (
+            <Card key={s._id}>
+              <Card.Content>
+                <Text>{s.name}</Text>
+                <Text>{s.notes}</Text>
 
-              {/* Map through workouts associated with the current s */}
-              <Text>
-                {s.workout && s.workout.length > 0
-                  ? s.workout.map((workoutId: any) => {
-                      const workout = workouts.find(
-                        (w: any) => w._id === workoutId
-                      );
-                      return workout ? (
-                        <Text key={workout._id}>{`${workout.name} `}</Text>
-                      ) : null;
-                    })
-                  : null}
-              </Text>
-            </Card.Content>
-            <Card.Actions>
-              <Button
-                icon={() => (
-                  <MaterialCommunityIcons
-                    name="pencil"
-                    size={20}
-                    color="black"
-                  />
-                )}
-                onPress={() => toggleModal(s)}>
-                Edit
-              </Button>
-              <DeleteBtn
-                resource="splits"
-                _id={s._id}
-                deleteCallback={(id) =>
-                  setSplit(split.filter((e: { _id: string }) => e._id !== id))
-                }
-              />
-            </Card.Actions>
-          </Card>
-        ))}
-
-        <Portal>
-          <Modal
-            visible={isModalVisible}
-            onDismiss={() => setIsModalVisible(false)}>
-            <Card>
-              <Card.Title title={selectedSplit ? "Edit Split" : "Add Split"} />
-
-              <View>
-                <TextInput
-                  placeholder="Split Name"
-                  value={form.name}
-                  onChangeText={(text) => setForm({ ...form, name: text })}
-                />
-                <MultiSelect
-                  items={workouts.map((workout: any) => ({
-                    id: workout._id,
-                    name: workout.name,
-                  }))}
-                  uniqueKey="id"
-                  selectedItems={form.workout}
-                  onSelectedItemsChange={(items) =>
-                    setForm({ ...form, workout: items })
+                {/* Map through workouts associated with the current s */}
+                <Text>
+                  {s.workout && s.workout.length > 0
+                    ? s.workout.map((workoutId: any) => {
+                        const workout = workouts.find(
+                          (w: any) => w._id === workoutId
+                        );
+                        return workout ? (
+                          <Text key={workout._id}>{`${workout.name} `}</Text>
+                        ) : null;
+                      })
+                    : null}
+                </Text>
+              </Card.Content>
+              <Card.Actions>
+                <Button
+                  icon={() => (
+                    <MaterialCommunityIcons
+                      name="pencil"
+                      size={20}
+                      color="black"
+                    />
+                  )}
+                  onPress={() => toggleModal(s)}>
+                  Edit
+                </Button>
+                <DeleteBtn
+                  resource="splits"
+                  _id={s._id}
+                  deleteCallback={(id) =>
+                    setSplit(split.filter((e: { _id: string }) => e._id !== id))
                   }
-                  selectText="Select Workouts"
-                  searchInputPlaceholderText="Search Workouts..."
-                  tagRemoveIconColor="#CCC"
-                  tagBorderColor="#CCC"
-                  tagTextColor="#CCC"
-                  selectedItemTextColor="#CCC"
-                  selectedItemIconColor="#CCC"
-                  itemTextColor="#000"
-                  displayKey="name"
                 />
-
-                <TextInput
-                  placeholder="Notes"
-                  value={form.notes}
-                  onChangeText={(text) => setForm({ ...form, notes: text })}
-                />
-              </View>
-
-              <Button onPress={selectedSplit ? handleEdit : handleAddSplit}>
-                {selectedSplit ? "Save" : "Add"}
-              </Button>
+              </Card.Actions>
             </Card>
-          </Modal>
-        </Portal>
-      </View>
+          ))}
+
+          <Portal>
+            <Modal
+              visible={isModalVisible}
+              onDismiss={() => setIsModalVisible(false)}>
+              <Card>
+                <Card.Title
+                  title={selectedSplit ? "Edit Split" : "Add Split"}
+                />
+
+                <View>
+                  <TextInput
+                    placeholder="Split Name"
+                    value={form.name}
+                    onChangeText={(text) => setForm({ ...form, name: text })}
+                  />
+                  <MultiSelect
+                    items={workouts.map((workout: any) => ({
+                      id: workout._id,
+                      name: workout.name,
+                    }))}
+                    uniqueKey="id"
+                    selectedItems={form.workout}
+                    onSelectedItemsChange={(items) =>
+                      setForm({ ...form, workout: items })
+                    }
+                    selectText="Select Workouts"
+                    searchInputPlaceholderText="Search Workouts..."
+                    tagRemoveIconColor="#CCC"
+                    tagBorderColor="#CCC"
+                    tagTextColor="#333"
+                    selectedItemTextColor="#333"
+                    selectedItemIconColor="#333"
+                    itemTextColor="#000"
+                    displayKey="name"
+                    styleMainWrapper={{
+                      borderWidth: 1,
+                      borderColor: "#CCC",
+                      borderRadius: 8,
+                      padding: 10,
+                    }}
+                    styleInputGroup={{ marginBottom: 10 }}
+                    styleDropdownMenuSubsection={{ padding: 10 }}
+                  />
+
+                  <TextInput
+                    placeholder="Notes"
+                    value={form.notes}
+                    onChangeText={(text) => setForm({ ...form, notes: text })}
+                  />
+                </View>
+                {error && <Text style={{ color: "red" }}>{error}</Text>}
+
+                <Button onPress={selectedSplit ? handleEdit : handleAddSplit}>
+                  {selectedSplit ? "Save" : "Add"}
+                </Button>
+              </Card>
+            </Modal>
+          </Portal>
+        </View>
+      </ScrollView>
     </>
   );
 }

@@ -16,12 +16,14 @@ import UserInfo from "../../services/User";
 import DeleteBtn from "../../components/DeleteBtn";
 import axios from "axios";
 import { useSession } from "../../contexts/AuthContext";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function WorkoutPage() {
   const [workouts, setWorkouts] = useState([] as any);
   const [exercises, setExercises] = useState([] as any);
   const [selectedWorkout, setSelectedWorkout] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     exercises: [] as any,
@@ -46,7 +48,6 @@ export default function WorkoutPage() {
         session
       );
 
-      setIsModalVisible(false);
       setWorkouts((prevWorkouts: any) =>
         prevWorkouts.map((workout: any) =>
           workout._id === selectedWorkout._id ? editedWorkout : workout
@@ -56,8 +57,8 @@ export default function WorkoutPage() {
       // Close the modal after editing
       setIsModalVisible(false);
       console.log("Workout edited:", editedWorkout);
-    } catch (error) {
-      // Handle the error (e.g., display an error message)
+    } catch (error: any) {
+      setError(error.response.data.errors.name.message);
       console.error("Error editing workout:", error);
     }
   };
@@ -71,8 +72,8 @@ export default function WorkoutPage() {
       console.log("Workout added:", addedWorkout);
 
       // Reset the form or perform any other actions after successful submission
-    } catch (error) {
-      // Handle the error (e.g., display an error message)
+    } catch (error: any) {
+      setError(error.response.data.errors.name.message);
       console.error("Error adding workout:", error);
     }
   };
@@ -94,6 +95,7 @@ export default function WorkoutPage() {
       });
     if (selectedWorkout) {
       // If a workout is selected for editing, set its values in the form
+      setError("");
       setForm({
         name: selectedWorkout.name || "",
         exercises: selectedWorkout.exercises || [],
@@ -102,6 +104,7 @@ export default function WorkoutPage() {
       });
     } else {
       // If no workout is selected, reset the form
+      setError("");
       setForm({
         name: "",
         exercises: [],
@@ -114,102 +117,115 @@ export default function WorkoutPage() {
   return (
     <>
       <Stack.Screen options={{ headerTitle: `Workouts` }} />
-      <View style={{ flex: 1, gap: 10 }}>
-        <Button mode="contained" onPress={() => toggleModal(null)}>
-          Add Workout
-        </Button>
+      <ScrollView>
+        <View style={{ flex: 1, gap: 10 }}>
+          <Button mode="contained" onPress={() => toggleModal(null)}>
+            Add Workout
+          </Button>
 
-        {workouts.map((workout: any) => (
-          <Card key={workout._id}>
-            <Card.Content>
-              <Text>{workout.name}</Text>
-              <Text>{workout.notes}</Text>
+          {workouts.map((workout: any) => (
+            <Card key={workout._id}>
+              <Card.Content>
+                <Text>{workout.name}</Text>
+                <Text>{workout.notes}</Text>
 
-              {/* Map through exercises associated with the current workout */}
-              <Text>
-                {exercises
-                  .filter((exercise: any) =>
-                    workout.exercises.includes(exercise._id)
-                  )
-                  .map((exercise: any) => (
-                    <Text key={exercise._id}>{`${exercise.name} `}</Text>
-                  ))}
-              </Text>
-            </Card.Content>
-            <Card.Actions>
-              <Button
-                icon={() => (
-                  <MaterialCommunityIcons
-                    name="pencil"
-                    size={20}
-                    color="black"
-                  />
-                )}
-                onPress={() => toggleModal(workout)}>
-                Edit
-              </Button>
-              <DeleteBtn
-                resource="workouts"
-                _id={workout._id}
-                deleteCallback={(id) =>
-                  setWorkouts(
-                    workouts.filter((e: { _id: string }) => e._id !== id)
-                  )
-                }
-              />
-            </Card.Actions>
-          </Card>
-        ))}
-
-        <Portal>
-          <Modal
-            visible={isModalVisible}
-            onDismiss={() => setIsModalVisible(false)}>
-            <Card>
-              <Card.Title
-                title={selectedWorkout ? "Edit Workout" : "Add Workout"}
-              />
-
-              <View>
-                <TextInput
-                  placeholder="Workout Name"
-                  value={form.name}
-                  onChangeText={(text) => setForm({ ...form, name: text })}
-                />
-                <MultiSelect
-                  items={exercises.map((exercise: any) => ({
-                    id: exercise._id,
-                    name: exercise.name,
-                  }))}
-                  uniqueKey="id"
-                  selectedItems={form.exercises}
-                  onSelectedItemsChange={(items) =>
-                    setForm({ ...form, exercises: items })
+                {/* Map through exercises associated with the current workout */}
+                <Text>
+                  {exercises
+                    .filter((exercise: any) =>
+                      workout.exercises.includes(exercise._id)
+                    )
+                    .map((exercise: any) => (
+                      <Text key={exercise._id}>{`${exercise.name} `}</Text>
+                    ))}
+                </Text>
+              </Card.Content>
+              <Card.Actions>
+                <Button
+                  icon={() => (
+                    <MaterialCommunityIcons
+                      name="pencil"
+                      size={20}
+                      color="black"
+                    />
+                  )}
+                  onPress={() => toggleModal(workout)}>
+                  Edit
+                </Button>
+                <DeleteBtn
+                  resource="workouts"
+                  _id={workout._id}
+                  deleteCallback={(id) =>
+                    setWorkouts(
+                      workouts.filter((e: { _id: string }) => e._id !== id)
+                    )
                   }
-                  selectText="Select Exercises"
-                  searchInputPlaceholderText="Search Exercises..."
-                  tagRemoveIconColor="#CCC"
-                  tagBorderColor="#CCC"
-                  tagTextColor="#CCC"
-                  selectedItemTextColor="#CCC"
-                  selectedItemIconColor="#CCC"
-                  itemTextColor="#000"
-                  displayKey="name"
                 />
-                <TextInput
-                  placeholder="Notes"
-                  value={form.notes}
-                  onChangeText={(text) => setForm({ ...form, notes: text })}
-                />
-              </View>
-
-              <Button onPress={selectedWorkout ? handleEdit : handleAddWorkout}>
-                {selectedWorkout ? "Save" : "Add"}
-              </Button>
+              </Card.Actions>
             </Card>
-          </Modal>
-        </Portal>
-      </View>
+          ))}
+
+          <Portal>
+            <Modal
+              visible={isModalVisible}
+              onDismiss={() => setIsModalVisible(false)}>
+              <Card>
+                <Card.Title
+                  title={selectedWorkout ? "Edit Workout" : "Add Workout"}
+                />
+
+                <View>
+                  <TextInput
+                    placeholder="Workout Name"
+                    value={form.name}
+                    onChangeText={(text) => setForm({ ...form, name: text })}
+                  />
+                  <MultiSelect
+                    items={exercises.map((exercise: any) => ({
+                      id: exercise._id,
+                      name: exercise.name,
+                    }))}
+                    uniqueKey="id"
+                    selectedItems={form.exercises}
+                    onSelectedItemsChange={(items) =>
+                      setForm({ ...form, exercises: items })
+                    }
+                    selectText="Select Exercises"
+                    searchInputPlaceholderText="Search Exercises..."
+                    tagRemoveIconColor="#CCC"
+                    tagBorderColor="#CCC"
+                    tagTextColor="#333"
+                    selectedItemTextColor="#333"
+                    selectedItemIconColor="#333"
+                    itemTextColor="#000"
+                    displayKey="name"
+                    styleMainWrapper={{
+                      borderWidth: 1,
+                      borderColor: "#CCC",
+                      borderRadius: 8,
+                      padding: 10,
+                    }}
+                    styleInputGroup={{ marginBottom: 10 }}
+                    styleDropdownMenuSubsection={{ padding: 10 }}
+                  />
+
+                  <TextInput
+                    placeholder="Notes"
+                    value={form.notes}
+                    onChangeText={(text) => setForm({ ...form, notes: text })}
+                  />
+                </View>
+                {error && <Text style={{ color: "red" }}>{error}</Text>}
+
+                <Button
+                  onPress={selectedWorkout ? handleEdit : handleAddWorkout}>
+                  {selectedWorkout ? "Save" : "Add"}
+                </Button>
+              </Card>
+            </Modal>
+          </Portal>
+        </View>
+      </ScrollView>
     </>
   );
 }

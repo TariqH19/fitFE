@@ -204,10 +204,9 @@ export default function WorkoutPage() {
                       borderWidth: 1,
                       borderColor: "#CCC",
                       borderRadius: 8,
-                      padding: 10,
+                      padding: 20,
                     }}
-                    styleInputGroup={{ marginBottom: 10 }}
-                    styleDropdownMenuSubsection={{ padding: 10 }}
+                    styleInputGroup={{ marginBottom: 10, padding: 10 }}
                   />
 
                   <TextInput

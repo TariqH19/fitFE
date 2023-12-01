@@ -9,6 +9,7 @@ export default function HealthPage() {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [bmiResult, setBMIResult] = useState(null);
+  const [error, setError] = useState("");
   const [history, setHistory] = useState([]);
 
   const calculateBMI = () => {
@@ -28,9 +29,12 @@ export default function HealthPage() {
         setBMIResult(newBMIResult);
         // Save to local storage
         saveToHistory(newBMIResult);
+        setHeight("");
+        setWeight("");
       })
       .catch((error) => {
         console.error(error);
+        setError("Something went wrong! Please try again.");
       });
   };
 
@@ -89,6 +93,7 @@ export default function HealthPage() {
           onChangeText={(text) => setWeight(text)}
           keyboardType="numeric"
         />
+        {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
         <Button
           style={{ marginBottom: 16 }}
           mode="contained"
@@ -104,15 +109,25 @@ export default function HealthPage() {
         )}
 
         <Text style={styles.subheader}>Your Past BMI:</Text>
-        {history.map((item, index) => (
-          <View key={index}>
-            <Text style={styles.weightText}>Date: {item.date}</Text>
-            <Text style={styles.weightText}>Height: {item.height} cm</Text>
-            <Text style={styles.weightText}>Weight: {item.weight} kg</Text>
-            <Text style={styles.weightText}>BMI: {item.bmi}</Text>
-            <Text style={styles.weightText}>Status: {item.status}</Text>
+        {history.length > 0 && (
+          <View>
+            <Text style={styles.weightText}>
+              Date: {history[history.length - 1].date}
+            </Text>
+            <Text style={styles.weightText}>
+              Height: {history[history.length - 1].height} cm
+            </Text>
+            <Text style={styles.weightText}>
+              Weight: {history[history.length - 1].weight} kg
+            </Text>
+            <Text style={styles.weightText}>
+              BMI: {history[history.length - 1].bmi}
+            </Text>
+            <Text style={styles.weightText}>
+              Status: {history[history.length - 1].status}
+            </Text>
           </View>
-        ))}
+        )}
       </ScrollView>
     </>
   );

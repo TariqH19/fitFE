@@ -27,7 +27,7 @@ export default function ProfilePage() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>Hello {data.name.toUpperCase()}</Text>
+      <Text style={styles.greeting}>Hello {data.name}</Text>
       <Text style={styles.email}>Email: {data.email}</Text>
       <Button title="Sign Out" onPress={signOut} />
     </View>

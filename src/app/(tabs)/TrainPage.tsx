@@ -194,8 +194,7 @@ export default function TrainPage() {
                       borderRadius: 8,
                       padding: 10,
                     }}
-                    styleInputGroup={{ marginBottom: 10 }}
-                    styleDropdownMenuSubsection={{ padding: 10 }}
+                    styleInputGroup={{ marginBottom: 10, padding: 10 }}
                   />
 
                   <TextInput

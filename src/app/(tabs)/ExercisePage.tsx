@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { addExercise, editExercise } from "../../services/ApiCalls";
 import UserInfo from "../../services/User";
 import DeleteBtn from "../../components/DeleteBtn";
-import { ScrollView } from "react-native-gesture-handler";
+import ActivityIndicator from "react-native-paper";
 
 export default function ExercisePage() {
   const [exercises, setExercises] = useState([] as any);
@@ -28,6 +28,7 @@ export default function ExercisePage() {
     notes: "",
     user: "",
   });
+  const [loading, setLoading] = useState(true);
   const { session }: any = useSession();
   const user = UserInfo();
   const userId = user._id;
@@ -81,6 +82,7 @@ export default function ExercisePage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://gym-api-omega.vercel.app/api/exercises/", {
         headers: {
@@ -92,6 +94,7 @@ export default function ExercisePage() {
       .then((response) => {
         console.log(response.data);
         setExercises(response.data);
+        setLoading(false);
       });
     if (selectedExercise) {
       // If an exercise is selected for editing, set its values in the form
@@ -117,84 +120,82 @@ export default function ExercisePage() {
   return (
     <>
       <Stack.Screen options={{ headerTitle: `Exercises` }} />
-      <ScrollView>
-        <View style={{ flex: 1, gap: 10, padding: 16 }}>
-          <Button mode="contained" onPress={() => toggleModal(null)}>
-            Add Exercise
-          </Button>
-          {exercises.map((exercise: any) => (
-            <Card key={exercise._id}>
-              <Card.Content>
-                <Text>{exercise.name}</Text>
-                <Text>{exercise.muscle_group}</Text>
-                <Text>{exercise.notes}</Text>
-              </Card.Content>
-              <Card.Actions>
-                <Button
-                  style={{ margin: 12 }}
-                  icon={() => (
-                    <MaterialCommunityIcons
-                      name="pencil"
-                      size={20}
-                      color="black"
-                    />
-                  )}
-                  onPress={() => toggleModal(exercise)}>
-                  Edit
-                </Button>
-                <DeleteBtn
-                  resource="exercises"
-                  _id={exercise._id}
-                  deleteCallback={(id) =>
-                    setExercises(
-                      exercises.filter((e: { _id: string }) => e._id !== id)
-                    )
+      <View style={{ flex: 1, gap: 10, padding: 16 }}>
+        <Button mode="contained" onPress={() => toggleModal(null)}>
+          Add Exercise
+        </Button>
+
+        {exercises.map((exercise: any) => (
+          <Card key={exercise._id}>
+            <Card.Content>
+              <Text>{exercise.name}</Text>
+              <Text>{exercise.muscle_group}</Text>
+              <Text>{exercise.notes}</Text>
+            </Card.Content>
+            <Card.Actions>
+              <Button
+                style={{ margin: 12 }}
+                icon={() => (
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={20}
+                    color="black"
+                  />
+                )}
+                onPress={() => toggleModal(exercise)}>
+                Edit
+              </Button>
+              <DeleteBtn
+                resource="exercises"
+                _id={exercise._id}
+                deleteCallback={(id) =>
+                  setExercises(
+                    exercises.filter((e: { _id: string }) => e._id !== id)
+                  )
+                }
+              />
+            </Card.Actions>
+          </Card>
+        ))}
+
+        <Portal>
+          <Modal
+            style={{ padding: 16, marginTop: -100 }}
+            visible={isModalVisible}
+            onDismiss={() => setIsModalVisible(false)}>
+            <Card>
+              <Card.Title
+                title={selectedExercise ? "Edit Exercise" : "Add Exercise"}
+              />
+              <View>
+                <TextInput
+                  placeholder="Exercise Name"
+                  value={form.name}
+                  onChangeText={(text) => setForm({ ...form, name: text })}
+                />
+                <TextInput
+                  placeholder="Muscle Group"
+                  value={form.muscle_group}
+                  onChangeText={(text) =>
+                    setForm({ ...form, muscle_group: text })
                   }
                 />
-              </Card.Actions>
-            </Card>
-          ))}
-
-          <Portal>
-            <Modal
-              style={{ padding: 16 }}
-              visible={isModalVisible}
-              onDismiss={() => setIsModalVisible(false)}>
-              <Card>
-                <Card.Title
-                  title={selectedExercise ? "Edit Exercise" : "Add Exercise"}
+                <TextInput
+                  placeholder="Notes"
+                  value={form.notes}
+                  onChangeText={(text) => setForm({ ...form, notes: text })}
                 />
+              </View>
+              {error && <Text style={{ color: "red" }}>{error}</Text>}
 
-                <View>
-                  <TextInput
-                    placeholder="Exercise Name"
-                    value={form.name}
-                    onChangeText={(text) => setForm({ ...form, name: text })}
-                  />
-                  <TextInput
-                    placeholder="Muscle Group"
-                    value={form.muscle_group}
-                    onChangeText={(text) =>
-                      setForm({ ...form, muscle_group: text })
-                    }
-                  />
-                  <TextInput
-                    placeholder="Notes"
-                    value={form.notes}
-                    onChangeText={(text) => setForm({ ...form, notes: text })}
-                  />
-                </View>
-                {error && <Text style={{ color: "red" }}>{error}</Text>}
-
-                <Button
-                  onPress={selectedExercise ? handleEdit : handleAddExercise}>
-                  {selectedExercise ? "Save" : "Add"}
-                </Button>
-              </Card>
-            </Modal>
-          </Portal>
-        </View>
-      </ScrollView>
+              <Button
+                onPress={selectedExercise ? handleEdit : handleAddExercise}>
+                {selectedExercise ? "Save" : "Add"}
+              </Button>
+            </Card>
+          </Modal>
+        </Portal>
+      </View>
     </>
   );
 }

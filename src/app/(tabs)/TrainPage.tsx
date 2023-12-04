@@ -128,6 +128,7 @@ export default function TrainPage() {
             <Card key={s._id}>
               <Card.Content>
                 <Text>{s.name}</Text>
+                <Text>{s.notes}</Text>
               </Card.Content>
               <Card.Actions>
                 <Button
@@ -154,7 +155,7 @@ export default function TrainPage() {
 
           <Portal>
             <Modal
-              style={{ padding: 16 }}
+              style={{ padding: 16, marginTop: -100 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
               <Card>

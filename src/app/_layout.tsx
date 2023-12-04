@@ -14,8 +14,11 @@ import login from "./(tabs)/login";
 import { SessionProvider } from "../contexts/AuthContext";
 import { PaperProvider } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Redirect } from "expo-router";
+import { useSession } from "../contexts/AuthContext";
 
 export default function Nav() {
+  // const { session }: any = useSession();
   const hiddenScreens = {
     ExercisePage,
     WorkoutPage,
@@ -33,6 +36,10 @@ export default function Nav() {
       <Stack.Screen name={screenName} component={component} />
     </Stack.Navigator>
   );
+
+  // if (!session) {
+  //   return Redirect("/(tabs)/login" as never);
+  // }
 
   return (
     <SessionProvider>

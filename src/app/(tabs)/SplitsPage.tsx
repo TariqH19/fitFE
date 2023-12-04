@@ -176,7 +176,7 @@ export default function SplitPage() {
 
           <Portal>
             <Modal
-              style={{ padding: 16 }}
+              style={{ padding: 16, marginTop: -100 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
               <Card>

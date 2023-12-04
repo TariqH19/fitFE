@@ -31,6 +31,7 @@ export default function HealthPage() {
         saveToHistory(newBMIResult);
         setHeight("");
         setWeight("");
+        setError("");
       })
       .catch((error) => {
         console.error(error);
@@ -103,30 +104,10 @@ export default function HealthPage() {
         </Button>
         {bmiResult && (
           <>
-            <Text>BMI: {bmiResult.bmi}</Text>
-            <Text>Status: {bmiResult.status}</Text>
+            <Text style={styles.subheader}>Your BMI:</Text>
+            <Text style={styles.rText}>BMI: {bmiResult.bmi}</Text>
+            <Text style={styles.rText}>Status: {bmiResult.status}</Text>
           </>
-        )}
-
-        <Text style={styles.subheader}>Your Past BMI:</Text>
-        {history.length > 0 && (
-          <View>
-            <Text style={styles.weightText}>
-              Date: {history[history.length - 1].date}
-            </Text>
-            <Text style={styles.weightText}>
-              Height: {history[history.length - 1].height} cm
-            </Text>
-            <Text style={styles.weightText}>
-              Weight: {history[history.length - 1].weight} kg
-            </Text>
-            <Text style={styles.weightText}>
-              BMI: {history[history.length - 1].bmi}
-            </Text>
-            <Text style={styles.weightText}>
-              Status: {history[history.length - 1].status}
-            </Text>
-          </View>
         )}
       </ScrollView>
     </>
@@ -145,15 +126,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
   },
-  weightText: {
-    fontSize: 16,
-    fontWeight: "700",
+  rText: {
+    fontSize: 24,
     marginBottom: 8,
   },
   subheader: {
     marginBottom: 16,
     color: "#888",
     fontWeight: "400",
-    fontSize: 24,
+    fontSize: 36,
   },
 });

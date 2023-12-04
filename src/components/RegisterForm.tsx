@@ -44,7 +44,7 @@ export default function LoginForm() {
       .then((response) => {
         console.log(response.data);
         signIn(response.data.token);
-        navigation.navigate("home" as never);
+        navigation.navigate("(tabs)/home" as never);
 
         setForm({
           name: "",

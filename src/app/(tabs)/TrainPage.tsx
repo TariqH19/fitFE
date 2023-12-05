@@ -17,6 +17,7 @@ import DeleteBtn from "../../components/DeleteBtn";
 import axios from "axios";
 import { useSession } from "../../contexts/AuthContext";
 import { ScrollView } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function TrainPage() {
   const [train, setTrain] = useState([] as any);
@@ -24,6 +25,7 @@ export default function TrainPage() {
   const [selectedTrain, setSelectedTrain] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
     workout: "",
@@ -80,6 +82,7 @@ export default function TrainPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://gym-api-omega.vercel.app/api/userData/", {
         headers: {
@@ -93,6 +96,7 @@ export default function TrainPage() {
         const { workoutexercise, workout } = response.data;
         setTrain(workoutexercise);
         setWorkouts(workout);
+        setLoading(false);
       });
     if (selectedTrain) {
       // If a train is selected for editing, set its values in the form
@@ -123,6 +127,12 @@ export default function TrainPage() {
           <Button mode="contained" onPress={() => toggleModal(null)}>
             Add Session
           </Button>
+
+          {!train.length && !loading && (
+            <Text style={{ textAlign: "center" }}>
+              No sessions found. Add a session to get started.
+            </Text>
+          )}
 
           {train.map((s: any) => (
             <Card key={s._id}>

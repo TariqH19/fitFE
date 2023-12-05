@@ -4,6 +4,7 @@ import { View, StyleSheet } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
+import { RAPID_API_KEY } from "@env";
 
 export default function HealthPage() {
   const [height, setHeight] = useState("");
@@ -18,8 +19,7 @@ export default function HealthPage() {
         `https://simple-bmi-calculator1.p.rapidapi.com/calculate/metric/${height}/${weight}`,
         {
           headers: {
-            "X-RapidAPI-Key":
-              "64c994b82amshb95f1bf42b1a9adp1d2357jsneb75b8047114",
+            "X-RapidAPI-Key": `${RAPID_API_KEY}`,
             "X-RapidAPI-Host": "simple-bmi-calculator1.p.rapidapi.com",
           },
         }

@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { addExercise, editExercise } from "../../services/ApiCalls";
 import UserInfo from "../../services/User";
 import DeleteBtn from "../../components/DeleteBtn";
-import ActivityIndicator from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function ExercisePage() {
   const [exercises, setExercises] = useState([] as any);
@@ -124,6 +124,14 @@ export default function ExercisePage() {
         <Button mode="contained" onPress={() => toggleModal(null)}>
           Add Exercise
         </Button>
+
+        {!exercises.length && !loading && (
+          <Text style={{ textAlign: "center" }}>
+            You have no exercises. Add one above.
+          </Text>
+        )}
+
+        {loading && <ActivityIndicator />}
 
         {exercises.map((exercise: any) => (
           <Card key={exercise._id}>

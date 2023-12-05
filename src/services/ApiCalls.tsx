@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Exercises, Workouts, Splits, Sessions } from "../types";
+import { Exercises, Workouts, Splits, Sessions, Weights } from "../types";
 
 export async function addExercise(
   formData: Exercises,
@@ -185,6 +185,53 @@ export async function editSession(
     return response.data; // You can return additional data if needed
   } catch (error) {
     console.error("Error editing session:", error);
+    throw error; // Propagate the error to handle it in the calling component
+  }
+}
+
+export async function addWeight(
+  formData: Weights,
+  session: string
+): Promise<any> {
+  try {
+    const response = await axios.post(
+      "https://gym-api-omega.vercel.app/api/weights/",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${session}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Weight added successfully:", response.data);
+    return response.data; // You can return additional data if needed
+  } catch (error) {
+    console.error("Error adding Weight:", error);
+    throw error; // Propagate the error to handle it in the calling component
+  }
+}
+
+export async function editWeight(
+  id: string,
+  formData: Weights,
+  session: string
+): Promise<any> {
+  try {
+    const response = await axios.put(
+      `https://gym-api-omega.vercel.app/api/weights/${id}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${session}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Weight Edited successfully:", response.data);
+    return response.data; // You can return additional data if needed
+  } catch (error) {
+    console.error("Error editing weight:", error);
     throw error; // Propagate the error to handle it in the calling component
   }
 }

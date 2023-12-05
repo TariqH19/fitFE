@@ -17,6 +17,7 @@ import DeleteBtn from "../../components/DeleteBtn";
 import axios from "axios";
 import { useSession } from "../../contexts/AuthContext";
 import { ScrollView } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function WorkoutPage() {
   const [workouts, setWorkouts] = useState([] as any);
@@ -24,6 +25,7 @@ export default function WorkoutPage() {
   const [selectedWorkout, setSelectedWorkout] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
     exercises: [] as any,
@@ -79,6 +81,8 @@ export default function WorkoutPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
+
     axios
       .get("https://gym-api-omega.vercel.app/api/userData/", {
         headers: {
@@ -92,6 +96,7 @@ export default function WorkoutPage() {
         const { workout, exercise } = response.data;
         setWorkouts(workout);
         setExercises(exercise);
+        setLoading(false);
       });
     if (selectedWorkout) {
       // If a workout is selected for editing, set its values in the form
@@ -122,6 +127,14 @@ export default function WorkoutPage() {
           <Button mode="contained" onPress={() => toggleModal(null)}>
             Add Workout
           </Button>
+
+          {!workouts.length && !loading && (
+            <Text style={{ textAlign: "center" }}>
+              You have no workouts yet. Add one above.
+            </Text>
+          )}
+
+          {loading && <ActivityIndicator />}
 
           {workouts.map((workout: any) => (
             <Card key={workout._id}>

@@ -33,3 +33,8 @@ export interface Sessions{
     notes: string;
     user: string;
 }
+
+export interface Weights{
+    weight: number;
+    user: string;
+}

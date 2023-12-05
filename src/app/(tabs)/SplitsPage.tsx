@@ -17,6 +17,7 @@ import DeleteBtn from "../../components/DeleteBtn";
 import axios from "axios";
 import { useSession } from "../../contexts/AuthContext";
 import { ScrollView } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function SplitPage() {
   const [split, setSplit] = useState([] as any);
@@ -24,6 +25,7 @@ export default function SplitPage() {
   const [selectedSplit, setSelectedSplit] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
     workout: [] as any,
@@ -83,6 +85,7 @@ export default function SplitPage() {
   };
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://gym-api-omega.vercel.app/api/userData/", {
         headers: {
@@ -96,6 +99,7 @@ export default function SplitPage() {
         const { splits, workout } = response.data;
         setSplit(splits);
         setWorkouts(workout);
+        setLoading(false);
       });
     if (selectedSplit) {
       // If a split is selected for editing, set its values in the form
@@ -130,6 +134,14 @@ export default function SplitPage() {
           <Button mode="contained" onPress={() => toggleModal(null)}>
             Add Split
           </Button>
+
+          {!split.length && !loading && (
+            <Text style={{ textAlign: "center" }}>
+              You have no splits yet. Add one above!
+            </Text>
+          )}
+
+          {loading && <ActivityIndicator />}
 
           {split.map((s: any) => (
             <Card key={s._id}>

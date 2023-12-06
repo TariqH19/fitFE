@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import axios from "axios";
 import { useSession } from "../../../contexts/AuthContext";
 import { decode } from "base-64";
+import { Button } from "react-native-paper";
 
 export default function ProfilePage() {
   const [data, setData] = useState({} as any);
@@ -28,7 +29,9 @@ export default function ProfilePage() {
     <View style={styles.container}>
       <Text style={styles.greeting}>Hello {data.name}</Text>
       <Text style={styles.email}>Email: {data.email}</Text>
-      <Button title="Sign Out" onPress={signOut} />
+      <Button mode="contained" onPress={signOut}>
+        Sign Out
+      </Button>
     </View>
   );
 }

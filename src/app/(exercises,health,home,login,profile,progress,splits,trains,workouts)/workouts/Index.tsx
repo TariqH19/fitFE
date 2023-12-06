@@ -155,13 +155,7 @@ export default function WorkoutPage() {
               </Card.Content>
               <Card.Actions>
                 <Button
-                  icon={() => (
-                    <MaterialCommunityIcons
-                      name="pencil"
-                      size={20}
-                      color="black"
-                    />
-                  )}
+                  style={{ margin: 12 }}
                   onPress={() => toggleModal(workout)}>
                   Edit
                 </Button>

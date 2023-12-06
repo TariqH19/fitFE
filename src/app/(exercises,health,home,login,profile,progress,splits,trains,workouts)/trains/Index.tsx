@@ -141,15 +141,7 @@ export default function TrainPage() {
                 <Text>{s.notes}</Text>
               </Card.Content>
               <Card.Actions>
-                <Button
-                  icon={() => (
-                    <MaterialCommunityIcons
-                      name="pencil"
-                      size={20}
-                      color="black"
-                    />
-                  )}
-                  onPress={() => toggleModal(s)}>
+                <Button style={{ margin: 12 }} onPress={() => toggleModal(s)}>
                   Edit
                 </Button>
                 <DeleteBtn

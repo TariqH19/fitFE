@@ -11,25 +11,27 @@ import {
   TextInput,
 } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { addSession, editSession } from "../../services/ApiCalls";
-import UserInfo from "../../services/User";
-import DeleteBtn from "../../components/DeleteBtn";
+import { addSplits, editSplit } from "../../../services/ApiCalls";
+import UserInfo from "../../../services/User";
+import DeleteBtn from "../../../components/DeleteBtn";
 import axios from "axios";
-import { useSession } from "../../contexts/AuthContext";
+import { useSession } from "../../../contexts/AuthContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 
-export default function TrainPage() {
-  const [train, setTrain] = useState([] as any);
+export default function SplitPage() {
+  const [split, setSplit] = useState([] as any);
   const [workouts, setWorkouts] = useState([] as any);
-  const [selectedTrain, setSelectedTrain] = useState(null as any);
+  const [selectedSplit, setSelectedSplit] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
-    workout: "",
+    workout: [] as any,
     notes: "",
+    dateStart: new Date(),
+    dateEnd: new Date(),
     user: "",
   });
 
@@ -37,47 +39,48 @@ export default function TrainPage() {
   const user = UserInfo();
   const userId = user._id;
 
-  const toggleModal = (train: any) => {
-    setSelectedTrain(train);
+  const toggleModal = (split: any) => {
+    setSelectedSplit(split);
     setIsModalVisible(!isModalVisible);
   };
 
   const handleEdit = async () => {
     try {
-      // Call the editTrain function to update the selected train
-      const editedTrain = await editSession(
-        selectedTrain._id, // Pass the ID of the selected train
+      // Call the editSplit function to update the selected split
+      const editedSplit = await editSplit(
+        selectedSplit._id, // Pass the ID of the selected split
         form,
         session
       );
 
-      setTrain((prevTrains: any) =>
-        prevTrains.map((train: any) =>
-          train._id === selectedTrain._id ? editedTrain : train
+      setSplit((prevSplits: any) =>
+        prevSplits.map((split: any) =>
+          split._id === selectedSplit._id ? editedSplit : split
         )
       );
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Train edited:", editedTrain);
+      console.log("Split edited:", editedSplit);
     } catch (error: any) {
+      // Handle the error (e.g., display an error message)
+      console.error("Error editing split:", error);
       setError(error.response.data.errors.name.message);
-      console.error("Error editing train:", error);
     }
   };
 
-  const handleAddTrain = async () => {
+  const handleAddSplit = async () => {
     try {
       // Include the user property in the form with the user id
-      const addedTrain = await addSession({ ...form, user: userId }, session);
+      const addedSplit = await addSplits({ ...form, user: userId }, session);
       setIsModalVisible(false);
-      setTrain([...train, addedTrain] as any);
-      console.log("Train added:", addedTrain);
+      setSplit([...split, addedSplit] as any);
+      console.log("Split added:", addedSplit);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error adding train:", error);
+      console.error("Error adding split:", error);
     }
   };
 
@@ -93,27 +96,31 @@ export default function TrainPage() {
       })
       .then((response) => {
         console.log(response.data);
-        const { workoutexercise, workout } = response.data;
-        setTrain(workoutexercise);
+        const { splits, workout } = response.data;
+        setSplit(splits);
         setWorkouts(workout);
         setLoading(false);
       });
-    if (selectedTrain) {
-      // If a train is selected for editing, set its values in the form
+    if (selectedSplit) {
+      // If a split is selected for editing, set its values in the form
       setError("");
       setForm({
-        name: selectedTrain.name || "",
-        notes: selectedTrain.notes || "",
-        workout: selectedTrain.workout || [],
+        name: selectedSplit.name || "",
+        workout: selectedSplit.workout || [],
+        notes: selectedSplit.notes || "",
+        dateStart: selectedSplit.dateStart || "",
+        dateEnd: selectedSplit.dateEnd || "",
         user: userId,
       });
     } else {
-      // If no train is selected, reset the form
+      // If no split is selected, reset the form
       setError("");
       setForm({
         name: "",
+        workout: [],
         notes: "",
-        workout: "",
+        dateStart: new Date(),
+        dateEnd: new Date(),
         user: userId,
       });
     }
@@ -121,24 +128,40 @@ export default function TrainPage() {
 
   return (
     <>
-      <Stack.Screen options={{ headerTitle: `Session` }} />
+      <Stack.Screen options={{ headerTitle: `Splits` }} />
       <ScrollView>
         <View style={{ flex: 1, gap: 10, padding: 16 }}>
           <Button mode="contained" onPress={() => toggleModal(null)}>
-            Add Session
+            Add Split
           </Button>
 
-          {!train.length && !loading && (
+          {!split.length && !loading && (
             <Text style={{ textAlign: "center" }}>
-              No sessions found. Add a session to get started.
+              You have no splits yet. Add one above!
             </Text>
           )}
 
-          {train.map((s: any) => (
+          {loading && <ActivityIndicator />}
+
+          {split.map((s: any) => (
             <Card key={s._id}>
               <Card.Content>
                 <Text>{s.name}</Text>
                 <Text>{s.notes}</Text>
+
+                {/* Map through workouts associated with the current s */}
+                <Text>
+                  {s.workout && s.workout.length > 0
+                    ? s.workout.map((workoutId: any) => {
+                        const workout = workouts.find(
+                          (w: any) => w._id === workoutId
+                        );
+                        return workout ? (
+                          <Text key={workout._id}>{`${workout.name} `}</Text>
+                        ) : null;
+                      })
+                    : null}
+                </Text>
               </Card.Content>
               <Card.Actions>
                 <Button
@@ -153,10 +176,10 @@ export default function TrainPage() {
                   Edit
                 </Button>
                 <DeleteBtn
-                  resource="workoutsexercises"
+                  resource="splits"
                   _id={s._id}
                   deleteCallback={(id) =>
-                    setTrain(train.filter((e: { _id: string }) => e._id !== id))
+                    setSplit(split.filter((e: { _id: string }) => e._id !== id))
                   }
                 />
               </Card.Actions>
@@ -170,25 +193,24 @@ export default function TrainPage() {
               onDismiss={() => setIsModalVisible(false)}>
               <Card>
                 <Card.Title
-                  title={selectedTrain ? "Edit Train" : "Add Train"}
+                  title={selectedSplit ? "Edit Split" : "Add Split"}
                 />
 
                 <View>
                   <TextInput
-                    placeholder="Train Name"
+                    placeholder="Split Name"
                     value={form.name}
                     onChangeText={(text) => setForm({ ...form, name: text })}
                   />
-
                   <MultiSelect
                     items={workouts.map((workout: any) => ({
                       id: workout._id,
                       name: workout.name,
                     }))}
                     uniqueKey="id"
-                    selectedItems={form.workout ? [form.workout] : []} // Ensure selectedItems is an array
+                    selectedItems={form.workout}
                     onSelectedItemsChange={(items) =>
-                      setForm({ ...form, workout: items[0] })
+                      setForm({ ...form, workout: items })
                     }
                     selectText="Select Workouts"
                     searchInputPlaceholderText="Search Workouts..."
@@ -216,8 +238,8 @@ export default function TrainPage() {
                 </View>
                 {error && <Text style={{ color: "red" }}>{error}</Text>}
 
-                <Button onPress={selectedTrain ? handleEdit : handleAddTrain}>
-                  {selectedTrain ? "Save" : "Add"}
+                <Button onPress={selectedSplit ? handleEdit : handleAddSplit}>
+                  {selectedSplit ? "Save" : "Add"}
                 </Button>
               </Card>
             </Modal>

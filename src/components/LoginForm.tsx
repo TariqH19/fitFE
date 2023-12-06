@@ -42,7 +42,7 @@ export default function LoginForm() {
       .then((response) => {
         console.log(response.data);
         signIn(response.data.token);
-        navigation.navigate("(tabs)/home" as never);
+        navigation.navigate("(home)" as never);
 
         setForm({
           email: "",

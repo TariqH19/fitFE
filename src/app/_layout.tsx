@@ -1,29 +1,27 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./(tabs)/home";
-import WeightTracker from "./(tabs)/progress";
-import HealthPage from "./(tabs)/health";
-import ProfilePage from "./(tabs)/profile";
-import ExercisePage from "./(tabs)/ExercisePage";
-import WorkoutPage from "./(tabs)/WorkoutPage";
-import SplitsPage from "./(tabs)/SplitsPage";
-import TrainPage from "./(tabs)/TrainPage";
-import login from "./(tabs)/login";
+import Exercise from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/exercises/Index";
+import Health from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/health/Index";
+import Home from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/home/Index";
+import Login from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/login/Index";
+import Profile from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/profile/Index";
+import Progress from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/progress/Index";
+import Split from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/splits/Index";
+import Train from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/trains/Index";
+import Workout from "./(exercises,health,home,login,profile,progress,splits,trains,workouts)/workouts/Index";
 import { SessionProvider } from "../contexts/AuthContext";
 import { PaperProvider } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Redirect } from "expo-router";
-import { useSession } from "../contexts/AuthContext";
+import { Text } from "react-native";
 
 export default function Nav() {
   // const { session }: any = useSession();
   const hiddenScreens = {
-    ExercisePage,
-    WorkoutPage,
-    SplitsPage,
-    TrainPage,
+    Exercise,
+    Workout,
+    Split,
+    Train,
     // login,
   };
 
@@ -37,10 +35,6 @@ export default function Nav() {
     </Stack.Navigator>
   );
 
-  // if (!session) {
-  //   return Redirect("/(tabs)/login" as never);
-  // }
-
   return (
     <SessionProvider>
       <PaperProvider>
@@ -50,13 +44,13 @@ export default function Nav() {
               let iconName;
 
               // Set icon based on the route name
-              if (route.name === "(tabs)/home") {
+              if (route.name === "(home)") {
                 iconName = "home";
-              } else if (route.name === "(tabs)/progress") {
+              } else if (route.name === "(progress)") {
                 iconName = "trending-up";
-              } else if (route.name === "(tabs)/health") {
+              } else if (route.name === "(health)") {
                 iconName = "favorite";
-              } else if (route.name === "(tabs)/profile") {
+              } else if (route.name === "(profile)") {
                 iconName = "person";
               }
 
@@ -69,38 +63,41 @@ export default function Nav() {
                 />
               );
             },
-            tabBarLabel: route.name.replace("(tabs)/", ""), // Use the route name as the label
+            tabBarLabel: ({ focused, color }) => {
+              const label = route.name.replace(/\(([^)]+)\)/, "$1"); // Remove parentheses but keep the content inside
+              return <Text style={{ color, fontSize: 12 }}>{label}</Text>;
+            },
           })}>
           <Tab.Screen
-            name="(tabs)/home"
-            component={HomeScreen}
+            name="(home)"
+            component={Home}
             options={{ headerTitle: "Home" }}
           />
           <Tab.Screen
-            name="(tabs)/progress"
-            component={WeightTracker}
+            name="(progress)"
+            component={Progress}
             options={{
               headerTitle: "Progress",
             }}
           />
           <Tab.Screen
-            name="(tabs)/health"
-            component={HealthPage}
+            name="(health)"
+            component={Health}
             options={{
               headerTitle: "Health",
             }}
           />
           <Tab.Screen
-            name="(tabs)/profile"
-            component={ProfilePage}
+            name="(profile)"
+            component={Profile}
             options={{
               headerTitle: "Profile",
             }}
           />
 
           <Tab.Screen
-            name="(tabs)/login"
-            component={login}
+            name="(login)"
+            component={Login}
             options={{
               tabBarButton: () => null,
               tabBarStyle: { display: "none" },
@@ -111,7 +108,7 @@ export default function Nav() {
           {Object.entries(hiddenScreens).map(([screenName, component]) => (
             <Tab.Screen
               key={screenName}
-              name={`(tabs)/${screenName}`}
+              name={`(${screenName.toLowerCase()}s)`}
               options={{
                 tabBarButton: () => null,
                 tabBarStyle: false,

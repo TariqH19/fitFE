@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
 import axios from "axios";
-import Constants from "expo-constants";
-import { useSession } from "../../contexts/AuthContext";
+import { useSession } from "../../../contexts/AuthContext";
 import { decode } from "base-64";
 
 export default function ProfilePage() {

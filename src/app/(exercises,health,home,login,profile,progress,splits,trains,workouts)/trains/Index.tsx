@@ -11,78 +11,78 @@ import {
   TextInput,
 } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { addWorkout, editWorkout } from "../../services/ApiCalls";
-import UserInfo from "../../services/User";
-import DeleteBtn from "../../components/DeleteBtn";
+import { addSession, editSession } from "../../../services/ApiCalls";
+import UserInfo from "../../../services/User";
+import DeleteBtn from "../../../components/DeleteBtn";
 import axios from "axios";
-import { useSession } from "../../contexts/AuthContext";
+import { useSession } from "../../../contexts/AuthContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 
-export default function WorkoutPage() {
+export default function TrainPage() {
+  const [train, setTrain] = useState([] as any);
   const [workouts, setWorkouts] = useState([] as any);
-  const [exercises, setExercises] = useState([] as any);
-  const [selectedWorkout, setSelectedWorkout] = useState(null as any);
+  const [selectedTrain, setSelectedTrain] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
-    exercises: [] as any,
+    workout: "",
     notes: "",
     user: "",
   });
+
   const { session }: any = useSession();
   const user = UserInfo();
   const userId = user._id;
 
-  const toggleModal = (workout: any) => {
-    setSelectedWorkout(workout);
+  const toggleModal = (train: any) => {
+    setSelectedTrain(train);
     setIsModalVisible(!isModalVisible);
   };
 
   const handleEdit = async () => {
     try {
-      // Call the editWorkout function to update the selected workout
-      const editedWorkout = await editWorkout(
-        selectedWorkout._id, // Pass the ID of the selected workout
+      // Call the editTrain function to update the selected train
+      const editedTrain = await editSession(
+        selectedTrain._id, // Pass the ID of the selected train
         form,
         session
       );
 
-      setWorkouts((prevWorkouts: any) =>
-        prevWorkouts.map((workout: any) =>
-          workout._id === selectedWorkout._id ? editedWorkout : workout
+      setTrain((prevTrains: any) =>
+        prevTrains.map((train: any) =>
+          train._id === selectedTrain._id ? editedTrain : train
         )
       );
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Workout edited:", editedWorkout);
+      console.log("Train edited:", editedTrain);
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error editing workout:", error);
+      console.error("Error editing train:", error);
     }
   };
 
-  const handleAddWorkout = async () => {
+  const handleAddTrain = async () => {
     try {
       // Include the user property in the form with the user id
-      const addedWorkout = await addWorkout({ ...form, user: userId }, session);
+      const addedTrain = await addSession({ ...form, user: userId }, session);
       setIsModalVisible(false);
-      setWorkouts([...workouts, addedWorkout] as any);
-      console.log("Workout added:", addedWorkout);
+      setTrain([...train, addedTrain] as any);
+      console.log("Train added:", addedTrain);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error adding workout:", error);
+      console.error("Error adding train:", error);
     }
   };
 
   useEffect(() => {
     setLoading(true);
-
     axios
       .get("https://gym-api-omega.vercel.app/api/userData/", {
         headers: {
@@ -93,27 +93,27 @@ export default function WorkoutPage() {
       })
       .then((response) => {
         console.log(response.data);
-        const { workout, exercise } = response.data;
+        const { workoutexercise, workout } = response.data;
+        setTrain(workoutexercise);
         setWorkouts(workout);
-        setExercises(exercise);
         setLoading(false);
       });
-    if (selectedWorkout) {
-      // If a workout is selected for editing, set its values in the form
+    if (selectedTrain) {
+      // If a train is selected for editing, set its values in the form
       setError("");
       setForm({
-        name: selectedWorkout.name || "",
-        exercises: selectedWorkout.exercises || [],
-        notes: selectedWorkout.notes || "",
+        name: selectedTrain.name || "",
+        notes: selectedTrain.notes || "",
+        workout: selectedTrain.workout || [],
         user: userId,
       });
     } else {
-      // If no workout is selected, reset the form
+      // If no train is selected, reset the form
       setError("");
       setForm({
         name: "",
-        exercises: [],
         notes: "",
+        workout: "",
         user: userId,
       });
     }
@@ -121,37 +121,24 @@ export default function WorkoutPage() {
 
   return (
     <>
-      <Stack.Screen options={{ headerTitle: `Workouts` }} />
+      <Stack.Screen options={{ headerTitle: `Session` }} />
       <ScrollView>
         <View style={{ flex: 1, gap: 10, padding: 16 }}>
           <Button mode="contained" onPress={() => toggleModal(null)}>
-            Add Workout
+            Add Session
           </Button>
 
-          {!workouts.length && !loading && (
+          {!train.length && !loading && (
             <Text style={{ textAlign: "center" }}>
-              You have no workouts yet. Add one above.
+              No sessions found. Add a session to get started.
             </Text>
           )}
 
-          {loading && <ActivityIndicator />}
-
-          {workouts.map((workout: any) => (
-            <Card key={workout._id}>
+          {train.map((s: any) => (
+            <Card key={s._id}>
               <Card.Content>
-                <Text>{workout.name}</Text>
-                <Text>{workout.notes}</Text>
-
-                {/* Map through exercises associated with the current workout */}
-                <Text>
-                  {exercises
-                    .filter((exercise: any) =>
-                      workout.exercises.includes(exercise._id)
-                    )
-                    .map((exercise: any) => (
-                      <Text key={exercise._id}>{`${exercise.name} `}</Text>
-                    ))}
-                </Text>
+                <Text>{s.name}</Text>
+                <Text>{s.notes}</Text>
               </Card.Content>
               <Card.Actions>
                 <Button
@@ -162,16 +149,14 @@ export default function WorkoutPage() {
                       color="black"
                     />
                   )}
-                  onPress={() => toggleModal(workout)}>
+                  onPress={() => toggleModal(s)}>
                   Edit
                 </Button>
                 <DeleteBtn
-                  resource="workouts"
-                  _id={workout._id}
+                  resource="workoutsexercises"
+                  _id={s._id}
                   deleteCallback={(id) =>
-                    setWorkouts(
-                      workouts.filter((e: { _id: string }) => e._id !== id)
-                    )
+                    setTrain(train.filter((e: { _id: string }) => e._id !== id))
                   }
                 />
               </Card.Actions>
@@ -185,27 +170,28 @@ export default function WorkoutPage() {
               onDismiss={() => setIsModalVisible(false)}>
               <Card>
                 <Card.Title
-                  title={selectedWorkout ? "Edit Workout" : "Add Workout"}
+                  title={selectedTrain ? "Edit Train" : "Add Train"}
                 />
 
                 <View>
                   <TextInput
-                    placeholder="Workout Name"
+                    placeholder="Train Name"
                     value={form.name}
                     onChangeText={(text) => setForm({ ...form, name: text })}
                   />
+
                   <MultiSelect
-                    items={exercises.map((exercise: any) => ({
-                      id: exercise._id,
-                      name: exercise.name,
+                    items={workouts.map((workout: any) => ({
+                      id: workout._id,
+                      name: workout.name,
                     }))}
                     uniqueKey="id"
-                    selectedItems={form.exercises}
+                    selectedItems={form.workout ? [form.workout] : []} // Ensure selectedItems is an array
                     onSelectedItemsChange={(items) =>
-                      setForm({ ...form, exercises: items })
+                      setForm({ ...form, workout: items[0] })
                     }
-                    selectText="Select Exercises"
-                    searchInputPlaceholderText="Search Exercises..."
+                    selectText="Select Workouts"
+                    searchInputPlaceholderText="Search Workouts..."
                     tagRemoveIconColor="#CCC"
                     tagBorderColor="#CCC"
                     tagTextColor="#333"
@@ -217,7 +203,7 @@ export default function WorkoutPage() {
                       borderWidth: 1,
                       borderColor: "#CCC",
                       borderRadius: 8,
-                      padding: 20,
+                      padding: 10,
                     }}
                     styleInputGroup={{ marginBottom: 10, padding: 10 }}
                   />
@@ -230,9 +216,8 @@ export default function WorkoutPage() {
                 </View>
                 {error && <Text style={{ color: "red" }}>{error}</Text>}
 
-                <Button
-                  onPress={selectedWorkout ? handleEdit : handleAddWorkout}>
-                  {selectedWorkout ? "Save" : "Add"}
+                <Button onPress={selectedTrain ? handleEdit : handleAddTrain}>
+                  {selectedTrain ? "Save" : "Add"}
                 </Button>
               </Card>
             </Modal>

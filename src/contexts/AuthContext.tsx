@@ -35,7 +35,12 @@ export function SessionProvider(props: React.PropsWithChildren) {
         },
         signOut: () => {
           setSession(null);
-          navigation.navigate("(tabs)/login" as never);
+
+          // navigation.navigate("(login)" as never);
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "(login)" as never }],
+          });
         },
         session,
         isLoading,

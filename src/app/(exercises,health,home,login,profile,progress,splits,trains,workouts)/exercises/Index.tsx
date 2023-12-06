@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Stack } from "expo-router";
 import { useState, useEffect } from "react";
-import { useSession } from "../../contexts/AuthContext";
+import { useSession } from "../../../contexts/AuthContext";
 import axios from "axios";
 import {
   Card,
@@ -12,9 +12,9 @@ import {
   TextInput,
 } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { addExercise, editExercise } from "../../services/ApiCalls";
-import UserInfo from "../../services/User";
-import DeleteBtn from "../../components/DeleteBtn";
+import { addExercise, editExercise } from "../../../services/ApiCalls";
+import UserInfo from "../../../services/User";
+import DeleteBtn from "../../../components/DeleteBtn";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function ExercisePage() {

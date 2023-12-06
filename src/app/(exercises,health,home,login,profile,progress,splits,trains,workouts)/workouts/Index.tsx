@@ -11,81 +11,78 @@ import {
   TextInput,
 } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { addSplits, editSplit } from "../../services/ApiCalls";
-import UserInfo from "../../services/User";
-import DeleteBtn from "../../components/DeleteBtn";
+import { addWorkout, editWorkout } from "../../../services/ApiCalls";
+import UserInfo from "../../../services/User";
+import DeleteBtn from "../../../components/DeleteBtn";
 import axios from "axios";
-import { useSession } from "../../contexts/AuthContext";
+import { useSession } from "../../../contexts/AuthContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { ActivityIndicator } from "react-native-paper";
 
-export default function SplitPage() {
-  const [split, setSplit] = useState([] as any);
+export default function WorkoutPage() {
   const [workouts, setWorkouts] = useState([] as any);
-  const [selectedSplit, setSelectedSplit] = useState(null as any);
+  const [exercises, setExercises] = useState([] as any);
+  const [selectedWorkout, setSelectedWorkout] = useState(null as any);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
-    workout: [] as any,
+    exercises: [] as any,
     notes: "",
-    dateStart: new Date(),
-    dateEnd: new Date(),
     user: "",
   });
-
   const { session }: any = useSession();
   const user = UserInfo();
   const userId = user._id;
 
-  const toggleModal = (split: any) => {
-    setSelectedSplit(split);
+  const toggleModal = (workout: any) => {
+    setSelectedWorkout(workout);
     setIsModalVisible(!isModalVisible);
   };
 
   const handleEdit = async () => {
     try {
-      // Call the editSplit function to update the selected split
-      const editedSplit = await editSplit(
-        selectedSplit._id, // Pass the ID of the selected split
+      // Call the editWorkout function to update the selected workout
+      const editedWorkout = await editWorkout(
+        selectedWorkout._id, // Pass the ID of the selected workout
         form,
         session
       );
 
-      setSplit((prevSplits: any) =>
-        prevSplits.map((split: any) =>
-          split._id === selectedSplit._id ? editedSplit : split
+      setWorkouts((prevWorkouts: any) =>
+        prevWorkouts.map((workout: any) =>
+          workout._id === selectedWorkout._id ? editedWorkout : workout
         )
       );
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Split edited:", editedSplit);
+      console.log("Workout edited:", editedWorkout);
     } catch (error: any) {
-      // Handle the error (e.g., display an error message)
-      console.error("Error editing split:", error);
       setError(error.response.data.errors.name.message);
+      console.error("Error editing workout:", error);
     }
   };
 
-  const handleAddSplit = async () => {
+  const handleAddWorkout = async () => {
     try {
       // Include the user property in the form with the user id
-      const addedSplit = await addSplits({ ...form, user: userId }, session);
+      const addedWorkout = await addWorkout({ ...form, user: userId }, session);
       setIsModalVisible(false);
-      setSplit([...split, addedSplit] as any);
-      console.log("Split added:", addedSplit);
+      setWorkouts([...workouts, addedWorkout] as any);
+      console.log("Workout added:", addedWorkout);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error adding split:", error);
+      console.error("Error adding workout:", error);
     }
   };
 
   useEffect(() => {
     setLoading(true);
+
     axios
       .get("https://gym-api-omega.vercel.app/api/userData/", {
         headers: {
@@ -96,31 +93,27 @@ export default function SplitPage() {
       })
       .then((response) => {
         console.log(response.data);
-        const { splits, workout } = response.data;
-        setSplit(splits);
+        const { workout, exercise } = response.data;
         setWorkouts(workout);
+        setExercises(exercise);
         setLoading(false);
       });
-    if (selectedSplit) {
-      // If a split is selected for editing, set its values in the form
+    if (selectedWorkout) {
+      // If a workout is selected for editing, set its values in the form
       setError("");
       setForm({
-        name: selectedSplit.name || "",
-        workout: selectedSplit.workout || [],
-        notes: selectedSplit.notes || "",
-        dateStart: selectedSplit.dateStart || "",
-        dateEnd: selectedSplit.dateEnd || "",
+        name: selectedWorkout.name || "",
+        exercises: selectedWorkout.exercises || [],
+        notes: selectedWorkout.notes || "",
         user: userId,
       });
     } else {
-      // If no split is selected, reset the form
+      // If no workout is selected, reset the form
       setError("");
       setForm({
         name: "",
-        workout: [],
+        exercises: [],
         notes: "",
-        dateStart: new Date(),
-        dateEnd: new Date(),
         user: userId,
       });
     }
@@ -128,39 +121,36 @@ export default function SplitPage() {
 
   return (
     <>
-      <Stack.Screen options={{ headerTitle: `Splits` }} />
+      <Stack.Screen options={{ headerTitle: `Workouts` }} />
       <ScrollView>
         <View style={{ flex: 1, gap: 10, padding: 16 }}>
           <Button mode="contained" onPress={() => toggleModal(null)}>
-            Add Split
+            Add Workout
           </Button>
 
-          {!split.length && !loading && (
+          {!workouts.length && !loading && (
             <Text style={{ textAlign: "center" }}>
-              You have no splits yet. Add one above!
+              You have no workouts yet. Add one above.
             </Text>
           )}
 
           {loading && <ActivityIndicator />}
 
-          {split.map((s: any) => (
-            <Card key={s._id}>
+          {workouts.map((workout: any) => (
+            <Card key={workout._id}>
               <Card.Content>
-                <Text>{s.name}</Text>
-                <Text>{s.notes}</Text>
+                <Text>{workout.name}</Text>
+                <Text>{workout.notes}</Text>
 
-                {/* Map through workouts associated with the current s */}
+                {/* Map through exercises associated with the current workout */}
                 <Text>
-                  {s.workout && s.workout.length > 0
-                    ? s.workout.map((workoutId: any) => {
-                        const workout = workouts.find(
-                          (w: any) => w._id === workoutId
-                        );
-                        return workout ? (
-                          <Text key={workout._id}>{`${workout.name} `}</Text>
-                        ) : null;
-                      })
-                    : null}
+                  {exercises
+                    .filter((exercise: any) =>
+                      workout.exercises.includes(exercise._id)
+                    )
+                    .map((exercise: any) => (
+                      <Text key={exercise._id}>{`${exercise.name} `}</Text>
+                    ))}
                 </Text>
               </Card.Content>
               <Card.Actions>
@@ -172,14 +162,16 @@ export default function SplitPage() {
                       color="black"
                     />
                   )}
-                  onPress={() => toggleModal(s)}>
+                  onPress={() => toggleModal(workout)}>
                   Edit
                 </Button>
                 <DeleteBtn
-                  resource="splits"
-                  _id={s._id}
+                  resource="workouts"
+                  _id={workout._id}
                   deleteCallback={(id) =>
-                    setSplit(split.filter((e: { _id: string }) => e._id !== id))
+                    setWorkouts(
+                      workouts.filter((e: { _id: string }) => e._id !== id)
+                    )
                   }
                 />
               </Card.Actions>
@@ -193,27 +185,27 @@ export default function SplitPage() {
               onDismiss={() => setIsModalVisible(false)}>
               <Card>
                 <Card.Title
-                  title={selectedSplit ? "Edit Split" : "Add Split"}
+                  title={selectedWorkout ? "Edit Workout" : "Add Workout"}
                 />
 
                 <View>
                   <TextInput
-                    placeholder="Split Name"
+                    placeholder="Workout Name"
                     value={form.name}
                     onChangeText={(text) => setForm({ ...form, name: text })}
                   />
                   <MultiSelect
-                    items={workouts.map((workout: any) => ({
-                      id: workout._id,
-                      name: workout.name,
+                    items={exercises.map((exercise: any) => ({
+                      id: exercise._id,
+                      name: exercise.name,
                     }))}
                     uniqueKey="id"
-                    selectedItems={form.workout}
+                    selectedItems={form.exercises}
                     onSelectedItemsChange={(items) =>
-                      setForm({ ...form, workout: items })
+                      setForm({ ...form, exercises: items })
                     }
-                    selectText="Select Workouts"
-                    searchInputPlaceholderText="Search Workouts..."
+                    selectText="Select Exercises"
+                    searchInputPlaceholderText="Search Exercises..."
                     tagRemoveIconColor="#CCC"
                     tagBorderColor="#CCC"
                     tagTextColor="#333"
@@ -225,7 +217,7 @@ export default function SplitPage() {
                       borderWidth: 1,
                       borderColor: "#CCC",
                       borderRadius: 8,
-                      padding: 10,
+                      padding: 20,
                     }}
                     styleInputGroup={{ marginBottom: 10, padding: 10 }}
                   />
@@ -238,8 +230,9 @@ export default function SplitPage() {
                 </View>
                 {error && <Text style={{ color: "red" }}>{error}</Text>}
 
-                <Button onPress={selectedSplit ? handleEdit : handleAddSplit}>
-                  {selectedSplit ? "Save" : "Add"}
+                <Button
+                  onPress={selectedWorkout ? handleEdit : handleAddWorkout}>
+                  {selectedWorkout ? "Save" : "Add"}
                 </Button>
               </Card>
             </Modal>

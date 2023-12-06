@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LoginForm from "../../components/LoginForm";
-import RegisterForm from "../../components/RegisterForm";
+import LoginForm from "../../../components/LoginForm";
+import RegisterForm from "../../../components/RegisterForm";
 import { View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { Stack } from "expo-router";

@@ -13,30 +13,30 @@ export default function HomePage() {
 
   return (
     <ScrollView style={{ paddingHorizontal: 12 }}>
-      <TouchableOpacity onPress={() => handleImagePress("(tabs)/ExercisePage")}>
+      <TouchableOpacity onPress={() => handleImagePress("(exercises)")}>
         <Image
-          source={require("../../assets/Exercises.jpg")}
+          source={require("../../../assets/Exercises.jpg")}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleImagePress("(tabs)/WorkoutPage")}>
+      <TouchableOpacity onPress={() => handleImagePress("(workouts)")}>
         <Image
-          source={require("../../assets/Workouts.jpg")}
+          source={require("../../../assets/Workouts.jpg")}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleImagePress("(tabs)/SplitsPage")}>
+      <TouchableOpacity onPress={() => handleImagePress("(splits)")}>
         <Image
-          source={require("../../assets/Splits.jpg")}
+          source={require("../../../assets/Splits.jpg")}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => handleImagePress("(tabs)/TrainPage")}>
+      <TouchableOpacity onPress={() => handleImagePress("(trains)")}>
         <Image
-          source={require("../../assets/Sessions.jpg")}
+          source={require("../../../assets/Sessions.jpg")}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>

@@ -37,7 +37,7 @@ export default function Nav() {
 
   return (
     <Tab.Navigator
-      initialRouteName={session ? "(home)" : "(login)"}
+      initialRouteName={!session ? "(login)" : "(home)"}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;

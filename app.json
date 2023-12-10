@@ -2,7 +2,7 @@
   "expo": {
     "name": "fitx",
     "slug": "fitx",
-    "scheme":"fitx",
+    "scheme": "fitx",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tariqh8.fitx"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +31,20 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b76124a4-0d9c-490b-8e5a-83e0646dbf30"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b76124a4-0d9c-490b-8e5a-83e0646dbf30"
+    }
   }
 }

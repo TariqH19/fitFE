@@ -26,7 +26,13 @@ export default function LoginPage() {
           alignItems: "center",
           marginTop: -60,
         }}>
-        <Text style={{ fontSize: 30, fontWeight: "bold", marginBottom: 20 }}>
+        <Text
+          style={{
+            fontSize: 30,
+            fontWeight: "bold",
+            marginBottom: 20,
+            color: "black",
+          }}>
           WELCOME TO FITX
         </Text>
         <View

@@ -134,14 +134,15 @@ export default function ExercisePage() {
         {loading && <ActivityIndicator />}
 
         {exercises.map((exercise: any) => (
-          <Card key={exercise._id}>
+          <Card style={{ backgroundColor: "#F1F7FF" }} key={exercise._id}>
             <Card.Content>
-              <Text>{exercise.name}</Text>
-              <Text>{exercise.muscle_group}</Text>
-              <Text>{exercise.notes}</Text>
+              <Text style={{ color: "black" }}>{exercise.name}</Text>
+              <Text style={{ color: "black" }}>{exercise.muscle_group}</Text>
+              <Text style={{ color: "black" }}>{exercise.notes}</Text>
             </Card.Content>
             <Card.Actions>
               <Button
+                textColor="black"
                 style={{ margin: 12 }}
                 onPress={() => toggleModal(exercise)}>
                 Edit
@@ -164,17 +165,30 @@ export default function ExercisePage() {
             style={{ padding: 16, marginTop: -100 }}
             visible={isModalVisible}
             onDismiss={() => setIsModalVisible(false)}>
-            <Card>
+            <Card style={{ backgroundColor: "#CDD3DB" }}>
               <Card.Title
+                titleStyle={{ color: "black" }}
                 title={selectedExercise ? "Edit Exercise" : "Add Exercise"}
               />
               <View>
                 <TextInput
+                  mode="outlined"
+                  textColor="black"
+                  placeholderTextColor="black"
+                  style={{
+                    backgroundColor: "#F1F7FF",
+                  }}
                   placeholder="Exercise Name"
                   value={form.name}
                   onChangeText={(text) => setForm({ ...form, name: text })}
                 />
                 <TextInput
+                  mode="outlined"
+                  textColor="black"
+                  placeholderTextColor="black"
+                  style={{
+                    backgroundColor: "#F1F7FF",
+                  }}
                   placeholder="Muscle Group"
                   value={form.muscle_group}
                   onChangeText={(text) =>
@@ -182,6 +196,12 @@ export default function ExercisePage() {
                   }
                 />
                 <TextInput
+                  mode="outlined"
+                  textColor="black"
+                  placeholderTextColor="black"
+                  style={{
+                    backgroundColor: "#F1F7FF",
+                  }}
                   placeholder="Notes"
                   value={form.notes}
                   onChangeText={(text) => setForm({ ...form, notes: text })}
@@ -190,6 +210,7 @@ export default function ExercisePage() {
               {error && <Text style={{ color: "red" }}>{error}</Text>}
 
               <Button
+                textColor="black"
                 onPress={selectedExercise ? handleEdit : handleAddExercise}>
                 {selectedExercise ? "Save" : "Add"}
               </Button>

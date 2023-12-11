@@ -64,10 +64,11 @@ export default function LoginForm() {
     <>
       <View style={{ width: "80%" }}>
         <TextInput
+          textColor="black"
+          placeholderTextColor="black"
           style={{
             margin: 12,
             backgroundColor: "#F1F7FF",
-            color: "black",
           }}
           placeholder="Email"
           onChangeText={(text) => setForm({ ...form, email: text })}
@@ -75,22 +76,28 @@ export default function LoginForm() {
           id="email"
         />
         <TextInput
+          textColor="black"
+          placeholderTextColor="black"
           style={{
             margin: 12,
             backgroundColor: "#F1F7FF",
-            color: "black",
           }}
+          secureTextEntry={true}
           placeholder="Password"
           onChangeText={(text) => setForm({ ...form, password: text })}
           value={form.password}
           id="password"
         />
-        <Text style={{ margin: 12 }}>{error}</Text>
+        <Text style={{ margin: 12, color: "red" }}>{error}</Text>
         {isLoading ? (
           <ActivityIndicator size="large" color={theme.colors.primary} />
         ) : (
           <Button
-            style={{ margin: 12, backgroundColor: theme.colors.surface }}
+            style={{
+              margin: 12,
+              backgroundColor: "black",
+            }}
+            textColor="white"
             onPress={handleClick}>
             Submit
           </Button>

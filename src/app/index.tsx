@@ -1,4 +1,3 @@
-// App.js
 import React from "react";
 import { SessionProvider } from "../contexts/AuthContext";
 import { PaperProvider } from "react-native-paper";

@@ -8,6 +8,8 @@ export default function UserInfo() {
 
   useEffect(() => {
     if (session) {
+      console.log("Session:", session);
+
       // Decode the JWT token to get user information
       const tokenArray = session.split(".");
       if (tokenArray.length === 3) {
@@ -15,8 +17,12 @@ export default function UserInfo() {
           decode(tokenArray[1].replace(/-/g, "+").replace(/_/g, "/"))
         );
         setUser(decodedToken);
-        console.log(decodedToken);
+        console.log("Decoded Token:", decodedToken);
+      } else {
+        console.error("Invalid token format:", session);
       }
+    } else {
+      console.warn("No session found");
     }
   }, [session]);
 

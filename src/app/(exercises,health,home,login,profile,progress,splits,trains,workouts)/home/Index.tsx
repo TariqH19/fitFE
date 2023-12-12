@@ -14,28 +14,36 @@ export default function HomePage() {
     <ScrollView style={{ paddingHorizontal: 12 }}>
       <TouchableOpacity onPress={() => handleImagePress("(exercises)")}>
         <Image
-          source={require("../../../assets/Exercises.jpg")}
+          source={{
+            uri: "https://fitx-image-bucket.s3.eu-west-1.amazonaws.com/Exercises.jpg",
+          }}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => handleImagePress("(workouts)")}>
         <Image
-          source={require("../../../assets/Workouts.jpg")}
+          source={{
+            uri: "https://fitx-image-bucket.s3.eu-west-1.amazonaws.com/Workouts.jpg",
+          }}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => handleImagePress("(splits)")}>
         <Image
-          source={require("../../../assets/Splits.jpg")}
+          source={{
+            uri: "https://fitx-image-bucket.s3.eu-west-1.amazonaws.com/Splits.jpg",
+          }}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => handleImagePress("(trains)")}>
         <Image
-          source={require("../../../assets/Sessions.jpg")}
+          source={{
+            uri: "https://fitx-image-bucket.s3.eu-west-1.amazonaws.com/Sessions.jpg",
+          }}
           style={{ width: "100%", height: 200, marginBottom: 16 }}
         />
       </TouchableOpacity>

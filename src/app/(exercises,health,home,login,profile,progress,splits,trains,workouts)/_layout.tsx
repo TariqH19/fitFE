@@ -14,6 +14,7 @@ import { useSession } from "../../contexts/AuthContext";
 import { PaperProvider } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
+import { Redirect } from "expo-router";
 
 export default function Nav() {
   const { session }: any = useSession();
@@ -28,6 +29,10 @@ export default function Nav() {
   const Tab = createBottomTabNavigator();
   const Stack = createStackNavigator();
 
+  if (!session) {
+    return <Redirect href="/" />;
+  }
+
   // Generic function to create a hidden stack navigator for a specific screen
   const createHiddenStackNavigator = (screenName: any, component: any) => (
     <Stack.Navigator>
@@ -37,7 +42,6 @@ export default function Nav() {
 
   return (
     <Tab.Navigator
-      initialRouteName={!session ? "(login)" : "(home)"}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
@@ -66,13 +70,17 @@ export default function Nav() {
       <Tab.Screen
         name="(home)"
         component={Home}
-        options={{ headerTitle: "Home" }}
+        options={{
+          headerTitle: "Home",
+          headerTitleAlign: "center",
+        }}
       />
       <Tab.Screen
         name="(progress)"
         component={Progress}
         options={{
           headerTitle: "Progress",
+          headerTitleAlign: "center",
         }}
       />
       <Tab.Screen
@@ -80,6 +88,7 @@ export default function Nav() {
         component={Health}
         options={{
           headerTitle: "Health",
+          headerTitleAlign: "center",
         }}
       />
       <Tab.Screen
@@ -87,6 +96,7 @@ export default function Nav() {
         component={Profile}
         options={{
           headerTitle: "Profile",
+          headerTitleAlign: "center",
         }}
       />
 

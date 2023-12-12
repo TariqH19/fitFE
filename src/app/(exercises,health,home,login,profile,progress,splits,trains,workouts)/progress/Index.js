@@ -1,15 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
+import { View, ScrollView, StyleSheet, Dimensions } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LineChart } from "react-native-chart-kit";
-import { Button } from "react-native-paper";
+import { Button, Text, TextInput } from "react-native-paper";
 import axios from "axios";
 import { useSession } from "../../../contexts/AuthContext";
 import UserInfo from "../../../services/User";
@@ -112,7 +105,11 @@ const WeightTracker = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.header}>Weight Tracker</Text>
+        <Text
+          variant="displaySmall"
+          style={{ textAlign: "center", padding: 12, color: "black" }}>
+          Weight Tracker
+        </Text>
         <View style={styles.current}>
           <Text style={styles.currentWeight}>
             {weights.length > 0 ? currentWeight.weight : "0"}
@@ -121,7 +118,12 @@ const WeightTracker = () => {
         </View>
         <View style={styles.form}>
           <TextInput
-            style={styles.input}
+            mode="outlined"
+            textColor="black"
+            placeholderTextColor="black"
+            style={{
+              backgroundColor: "#F1F7FF",
+            }}
             keyboardType="numeric"
             placeholder={`Current Weight ${
               weights.length > 0 ? currentWeight.weight : "0"
@@ -129,8 +131,8 @@ const WeightTracker = () => {
             value={inputText}
             onChangeText={(text) => setInputText(text)}
           />
-          <Button onPress={addWeight} style={styles.button}>
-            <Text>Add Weight</Text>
+          <Button textColor="black" onPress={addWeight} style={styles.button}>
+            Add Weight
           </Button>
         </View>
 
@@ -194,8 +196,8 @@ const WeightTracker = () => {
                   .reverse()
                   .map((weight) => (
                     <View key={weight.date} style={styles.weightItem}>
-                      <Text style={styles.weightText}>{weight.weight} kg</Text>
-                      <Text style={styles.dateText}>
+                      <Text style={{ color: "black" }}>{weight.weight} kg</Text>
+                      <Text style={{ color: "black" }}>
                         {new Date(weight.date).toLocaleDateString()}
                       </Text>
                       <DeleteBtn

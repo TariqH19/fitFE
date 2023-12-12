@@ -64,6 +64,7 @@ export default function LoginForm() {
     <>
       <View style={{ width: "80%" }}>
         <TextInput
+          mode="outlined"
           textColor="black"
           placeholderTextColor="black"
           style={{
@@ -76,6 +77,7 @@ export default function LoginForm() {
           id="email"
         />
         <TextInput
+          mode="outlined"
           textColor="black"
           placeholderTextColor="black"
           style={{

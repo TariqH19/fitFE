@@ -207,7 +207,9 @@ export default function ExercisePage() {
                   onChangeText={(text) => setForm({ ...form, notes: text })}
                 />
               </View>
-              {error && <Text style={{ color: "red" }}>{error}</Text>}
+              <Text>
+                {error && <Text style={{ color: "red" }}>{error}</Text>}
+              </Text>
 
               <Button
                 textColor="black"

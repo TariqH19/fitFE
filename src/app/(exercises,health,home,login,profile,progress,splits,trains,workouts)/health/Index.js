@@ -79,16 +79,32 @@ export default function HealthPage() {
   return (
     <>
       <ScrollView style={{ padding: 16 }}>
-        <Text style={styles.header}>Calculate your BMI</Text>
+        <Text
+          variant="displaySmall"
+          style={{ color: "black", padding: 12, textAlign: "center" }}>
+          Calculate your BMI
+        </Text>
         <TextInput
-          style={styles.input}
+          mode="outlined"
+          textColor="black"
+          placeholderTextColor="black"
+          style={{
+            backgroundColor: "#F1F7FF",
+            margin: 12,
+          }}
           placeholder="Height (cm)"
           value={height}
           onChangeText={(text) => setHeight(text)}
           keyboardType="numeric"
         />
         <TextInput
-          style={styles.input}
+          mode="outlined"
+          textColor="black"
+          placeholderTextColor="black"
+          style={{
+            backgroundColor: "#F1F7FF",
+            margin: 12,
+          }}
           placeholder="Weight (kg)"
           value={weight}
           onChangeText={(text) => setWeight(text)}
@@ -104,9 +120,11 @@ export default function HealthPage() {
         </Button>
         {bmiResult && (
           <>
-            <Text style={styles.subheader}>Your BMI:</Text>
-            <Text style={styles.rText}>BMI: {bmiResult.bmi}</Text>
-            <Text style={styles.rText}>Status: {bmiResult.status}</Text>
+            <Text variant="displaySmall" style={{ color: "black" }}>
+              Your BMI:
+            </Text>
+            <Text style={{ color: "black" }}>BMI: {bmiResult.bmi}</Text>
+            <Text style={{ color: "black" }}>Status: {bmiResult.status}</Text>
           </>
         )}
       </ScrollView>

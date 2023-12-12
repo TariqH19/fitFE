@@ -144,27 +144,32 @@ export default function SplitPage() {
           {loading && <ActivityIndicator />}
 
           {split.map((s: any) => (
-            <Card key={s._id}>
+            <Card style={{ backgroundColor: "#F1F7FF" }} key={s._id}>
               <Card.Content>
-                <Text>{s.name}</Text>
-                <Text>{s.notes}</Text>
+                <Text style={{ color: "black" }}>{s.name}</Text>
+                <Text style={{ color: "black" }}>{s.notes}</Text>
 
                 {/* Map through workouts associated with the current s */}
-                <Text>
+                <Text style={{ color: "black" }}>
                   {s.workout && s.workout.length > 0
                     ? s.workout.map((workoutId: any) => {
                         const workout = workouts.find(
                           (w: any) => w._id === workoutId
                         );
                         return workout ? (
-                          <Text key={workout._id}>{`${workout.name} `}</Text>
+                          <Text
+                            style={{ color: "black" }}
+                            key={workout._id}>{`${workout.name} `}</Text>
                         ) : null;
                       })
                     : null}
                 </Text>
               </Card.Content>
               <Card.Actions>
-                <Button style={{ margin: 12 }} onPress={() => toggleModal(s)}>
+                <Button
+                  textColor="black"
+                  style={{ margin: 12 }}
+                  onPress={() => toggleModal(s)}>
                   Edit
                 </Button>
                 <DeleteBtn
@@ -183,18 +188,26 @@ export default function SplitPage() {
               style={{ padding: 16, marginTop: -100 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
-              <Card>
+              <Card style={{ backgroundColor: "#CDD3DB" }}>
                 <Card.Title
+                  titleStyle={{ color: "black" }}
                   title={selectedSplit ? "Edit Split" : "Add Split"}
                 />
 
                 <View>
                   <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#fff",
+                    }}
                     placeholder="Split Name"
                     value={form.name}
                     onChangeText={(text) => setForm({ ...form, name: text })}
                   />
                   <MultiSelect
+                    textColor="black"
                     items={workouts.map((workout: any) => ({
                       id: workout._id,
                       name: workout.name,
@@ -206,12 +219,12 @@ export default function SplitPage() {
                     }
                     selectText="Select Workouts"
                     searchInputPlaceholderText="Search Workouts..."
-                    tagRemoveIconColor="#CCC"
-                    tagBorderColor="#CCC"
-                    tagTextColor="#333"
-                    selectedItemTextColor="#333"
-                    selectedItemIconColor="#333"
-                    itemTextColor="#000"
+                    tagRemoveIconColor="#black"
+                    tagBorderColor="#black"
+                    tagTextColor="#black"
+                    selectedItemTextColor="#black"
+                    selectedItemIconColor="#black"
+                    itemTextColor="#black"
                     displayKey="name"
                     styleMainWrapper={{
                       borderWidth: 1,
@@ -223,14 +236,23 @@ export default function SplitPage() {
                   />
 
                   <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#fff",
+                    }}
                     placeholder="Notes"
                     value={form.notes}
                     onChangeText={(text) => setForm({ ...form, notes: text })}
                   />
                 </View>
-                {error && <Text style={{ color: "red" }}>{error}</Text>}
-
-                <Button onPress={selectedSplit ? handleEdit : handleAddSplit}>
+                <Text>
+                  {error && <Text style={{ color: "red" }}>{error}</Text>}
+                </Text>
+                <Button
+                  textColor="black"
+                  onPress={selectedSplit ? handleEdit : handleAddSplit}>
                   {selectedSplit ? "Save" : "Add"}
                 </Button>
               </Card>

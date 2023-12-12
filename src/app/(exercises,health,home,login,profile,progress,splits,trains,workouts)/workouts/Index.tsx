@@ -137,24 +137,27 @@ export default function WorkoutPage() {
           {loading && <ActivityIndicator />}
 
           {workouts.map((workout: any) => (
-            <Card key={workout._id}>
+            <Card style={{ backgroundColor: "#F1F7FF" }} key={workout._id}>
               <Card.Content>
-                <Text>{workout.name}</Text>
-                <Text>{workout.notes}</Text>
+                <Text style={{ color: "black" }}>{workout.name}</Text>
+                <Text style={{ color: "black" }}>{workout.notes}</Text>
 
                 {/* Map through exercises associated with the current workout */}
-                <Text>
+                <Text style={{ color: "black" }}>
                   {exercises
                     .filter((exercise: any) =>
                       workout.exercises.includes(exercise._id)
                     )
                     .map((exercise: any) => (
-                      <Text key={exercise._id}>{`${exercise.name} `}</Text>
+                      <Text
+                        style={{ color: "black" }}
+                        key={exercise._id}>{`${exercise.name} `}</Text>
                     ))}
                 </Text>
               </Card.Content>
               <Card.Actions>
                 <Button
+                  textColor="black"
                   style={{ margin: 12 }}
                   onPress={() => toggleModal(workout)}>
                   Edit
@@ -177,18 +180,26 @@ export default function WorkoutPage() {
               style={{ padding: 16, marginTop: -100 }}
               visible={isModalVisible}
               onDismiss={() => setIsModalVisible(false)}>
-              <Card>
+              <Card style={{ backgroundColor: "#CDD3DB" }}>
                 <Card.Title
+                  titleStyle={{ color: "black" }}
                   title={selectedWorkout ? "Edit Workout" : "Add Workout"}
                 />
 
                 <View>
                   <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#fff",
+                    }}
                     placeholder="Workout Name"
                     value={form.name}
                     onChangeText={(text) => setForm({ ...form, name: text })}
                   />
                   <MultiSelect
+                    textColor="black"
                     items={exercises.map((exercise: any) => ({
                       id: exercise._id,
                       name: exercise.name,
@@ -200,12 +211,12 @@ export default function WorkoutPage() {
                     }
                     selectText="Select Exercises"
                     searchInputPlaceholderText="Search Exercises..."
-                    tagRemoveIconColor="#CCC"
-                    tagBorderColor="#CCC"
-                    tagTextColor="#333"
-                    selectedItemTextColor="#333"
-                    selectedItemIconColor="#333"
-                    itemTextColor="#000"
+                    tagRemoveIconColor="#black"
+                    tagBorderColor="#black"
+                    tagTextColor="#black"
+                    selectedItemTextColor="#black"
+                    selectedItemIconColor="#black"
+                    itemTextColor="#black"
                     displayKey="name"
                     styleMainWrapper={{
                       borderWidth: 1,
@@ -217,14 +228,22 @@ export default function WorkoutPage() {
                   />
 
                   <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#fff",
+                    }}
                     placeholder="Notes"
                     value={form.notes}
                     onChangeText={(text) => setForm({ ...form, notes: text })}
                   />
                 </View>
-                {error && <Text style={{ color: "red" }}>{error}</Text>}
-
+                <Text>
+                  {error && <Text style={{ color: "red" }}>{error}</Text>}
+                </Text>
                 <Button
+                  textColor="black"
                   onPress={selectedWorkout ? handleEdit : handleAddWorkout}>
                   {selectedWorkout ? "Save" : "Add"}
                 </Button>

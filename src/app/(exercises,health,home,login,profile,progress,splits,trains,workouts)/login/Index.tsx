@@ -42,14 +42,22 @@ export default function LoginPage() {
           }}>
           <Button
             mode="contained"
-            onPress={handleLoginClick}
-            style={{ margin: 5 }}>
+            style={{
+              margin: 5,
+              backgroundColor: "black",
+            }}
+            textColor="white"
+            onPress={handleLoginClick}>
             Login
           </Button>
           <Button
             mode="contained"
             onPress={handleRegisterClick}
-            style={{ margin: 5 }}>
+            textColor="white"
+            style={{
+              margin: 5,
+              backgroundColor: "black",
+            }}>
             Register
           </Button>
         </View>

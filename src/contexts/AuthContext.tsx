@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface MyAuthContext {
   signIn: (token: string) => void;
   signOut: () => void;
-  session?: string | null;
+  session?: string | null | undefined;
   isLoading: boolean;
 }
 
@@ -14,45 +14,44 @@ const AuthContext = React.createContext<MyAuthContext | null>(null);
 
 export function useSession(): MyAuthContext {
   const value = React.useContext(AuthContext);
-  if (process.env.NODE_ENV !== "production") {
-    if (!value) {
-      throw new Error("useSession must be wrapped in a <SessionProvider />");
-    }
-  }
-
   return value as MyAuthContext;
 }
 
 export function SessionProvider(props: React.PropsWithChildren) {
-  const [[isLoading, session], setSession] = useStorageState("session");
+  const [sessionData, setSessionData] = useStorageState("session");
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = React.useState(true);
 
   useEffect(() => {
-    // Load session from storage on component mount
     const loadSession = async () => {
       try {
         const storedSession = await AsyncStorage.getItem("session");
         if (storedSession) {
-          setSession(storedSession);
+          setSessionData(storedSession);
         }
       } catch (error) {
         console.error("Error loading session from storage:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadSession();
-  }, []); // Empty dependency array to ensure it runs only once on mount
+  }, []);
+
+  // Extract session from the sessionData tuple
+  const session = sessionData[1];
 
   return (
     <AuthContext.Provider
       value={{
         signIn: (token) => {
-          setSession(token);
+          setSessionData(token);
           // Store the session in AsyncStorage for persistence
           AsyncStorage.setItem("session", token);
         },
         signOut: () => {
-          setSession(null);
+          setSessionData(null);
 
           // Remove the session from AsyncStorage on sign out
           AsyncStorage.removeItem("session");

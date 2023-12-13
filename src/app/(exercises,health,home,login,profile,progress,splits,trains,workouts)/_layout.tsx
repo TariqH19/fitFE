@@ -15,9 +15,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { Redirect } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function Nav() {
-  const { session }: any = useSession();
+  const { session, isLoading }: any = useSession();
   const hiddenScreens = {
     Exercise,
     Workout,
@@ -28,6 +29,20 @@ export default function Nav() {
 
   const Tab = createBottomTabNavigator();
   const Stack = createStackNavigator();
+
+  if (isLoading) {
+    // Render a loading indicator or wait until the session is loaded
+    return <ActivityIndicator />;
+  }
+
+  if (!session) {
+    // User is not authenticated, show the login screen
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} />
+      </Stack.Navigator>
+    );
+  }
 
   // Generic function to create a hidden stack navigator for a specific screen
   const createHiddenStackNavigator = (screenName: any, component: any) => (

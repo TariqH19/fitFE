@@ -5,10 +5,10 @@ import Nav from "./(exercises,health,home,login,profile,progress,splits,trains,w
 
 export default function App() {
   return (
-    <SessionProvider>
-      <PaperProvider>
+    <PaperProvider>
+      <SessionProvider>
         <Nav />
-      </PaperProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </PaperProvider>
   );
 }

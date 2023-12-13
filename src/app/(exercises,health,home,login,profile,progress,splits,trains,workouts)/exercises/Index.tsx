@@ -126,7 +126,7 @@ export default function ExercisePage() {
         </Button>
 
         {!exercises.length && !loading && (
-          <Text style={{ textAlign: "center" }}>
+          <Text style={{ textAlign: "center", color: "black" }}>
             You have no exercises. Add one above.
           </Text>
         )}

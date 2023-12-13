@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Exercise from "./exercises/Index";
@@ -11,7 +11,6 @@ import Split from "./splits/Index";
 import Train from "./trains/Index";
 import Workout from "./workouts/Index";
 import { useSession } from "../../contexts/AuthContext";
-import { PaperProvider } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { Redirect } from "expo-router";
@@ -29,9 +28,15 @@ export default function Nav() {
   const Tab = createBottomTabNavigator();
   const Stack = createStackNavigator();
 
-  if (!session) {
-    return <Redirect href="/" />;
-  }
+  // if (!session) {
+  //   return <Redirect href="/" />;
+  // }
+
+  setTimeout(() => {
+    if (!session) {
+      <Redirect href="/" />;
+    }
+  }, 1000);
 
   // Generic function to create a hidden stack navigator for a specific screen
   const createHiddenStackNavigator = (screenName: any, component: any) => (

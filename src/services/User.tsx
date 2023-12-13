@@ -8,7 +8,7 @@ export default function UserInfo() {
 
   useEffect(() => {
     if (session) {
-      console.log("Session:", session);
+      // console.log("Session:", session);
 
       // Decode the JWT token to get user information
       const tokenArray = session.split(".");

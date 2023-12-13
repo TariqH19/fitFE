@@ -124,7 +124,7 @@ const WeightTracker = () => {
             style={{
               backgroundColor: "#F1F7FF",
             }}
-            keyboardType="numeric"
+            keyboardType="decimal-pad"
             placeholder={`Current Weight ${
               weights.length > 0 ? currentWeight.weight : "0"
             }`}

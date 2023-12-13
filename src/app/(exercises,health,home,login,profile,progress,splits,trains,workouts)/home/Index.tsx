@@ -6,7 +6,6 @@ import { useSession } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
 
 export default function HomePage() {
-  const { session }: any = useSession();
   const navigation = useNavigation();
 
   const handleImagePress = (routeName: string) => {

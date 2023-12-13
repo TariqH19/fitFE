@@ -13,8 +13,6 @@ import Workout from "./workouts/Index";
 import { useSession } from "../../contexts/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
-import { Redirect } from "expo-router";
-import { useNavigation } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function Nav() {

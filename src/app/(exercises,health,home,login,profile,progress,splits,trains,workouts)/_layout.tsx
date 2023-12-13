@@ -14,6 +14,7 @@ import { useSession } from "../../contexts/AuthContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Text } from "react-native";
 import { Redirect } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Nav() {
   const { session }: any = useSession();
@@ -27,16 +28,6 @@ export default function Nav() {
 
   const Tab = createBottomTabNavigator();
   const Stack = createStackNavigator();
-
-  // if (!session) {
-  //   return <Redirect href="/" />;
-  // }
-
-  setTimeout(() => {
-    if (!session) {
-      <Redirect href="/" />;
-    }
-  }, 1000);
 
   // Generic function to create a hidden stack navigator for a specific screen
   const createHiddenStackNavigator = (screenName: any, component: any) => (

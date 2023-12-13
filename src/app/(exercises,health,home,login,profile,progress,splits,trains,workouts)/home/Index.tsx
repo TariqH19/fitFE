@@ -2,8 +2,11 @@ import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useSession } from "../../../contexts/AuthContext";
+import { useEffect } from "react";
 
 export default function HomePage() {
+  const { session }: any = useSession();
   const navigation = useNavigation();
 
   const handleImagePress = (routeName: string) => {

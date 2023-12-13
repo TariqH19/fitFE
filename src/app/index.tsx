@@ -6,9 +6,7 @@ import Nav from "./(exercises,health,home,login,profile,progress,splits,trains,w
 export default function App() {
   return (
     <PaperProvider>
-      <SessionProvider>
-        <Nav />
-      </SessionProvider>
+      <Nav />
     </PaperProvider>
   );
 }

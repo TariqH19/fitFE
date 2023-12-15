@@ -6,10 +6,11 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native-paper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSession } from "../contexts/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import { Linking } from "react-native";
 
 interface FormType {
   email?: string;
@@ -27,6 +28,40 @@ export default function LoginForm() {
     password: "",
   });
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const handleOpenURL = async (event: { url: string }) => {
+      console.log("Received URL:", event.url);
+
+      const token = event.url.split("token=")[1];
+      console.log("Extracted Token:", token);
+
+      if (token) {
+        // Decode the URI-encoded token
+        const decodedToken = decodeURIComponent(token);
+        console.log("Decoded Token:", decodedToken);
+
+        try {
+          // Use the decoded token to sign in
+          await signIn(decodedToken);
+          console.log("Sign-in successful");
+          navigation.navigate("(home)" as never);
+        } catch (error) {
+          // Handle any errors during sign-in
+          console.error("Error during sign-in:", error);
+          // You might want to show an error message to the user here
+        }
+      }
+    };
+
+    Linking.addEventListener("url", handleOpenURL);
+
+    // return () => Linking.removeEventListener("url", handleOpenURL);
+  }, [signIn, navigation]);
+
+  const handleLink = () => {
+    Linking.openURL("http://localhost:3000/auth/");
+  };
 
   const handleClick = () => {
     setIsLoading(true);
@@ -104,6 +139,16 @@ export default function LoginForm() {
             Submit
           </Button>
         )}
+        <Text style={{ margin: 12, color: "black" }}>OR</Text>
+        {/* <Button
+          style={{
+            margin: 12,
+            backgroundColor: "black",
+          }}
+          textColor="white"
+          onPress={handleLink}>
+          Login with Google
+        </Button> */}
       </View>
     </>
   );

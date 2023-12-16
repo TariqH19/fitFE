@@ -34,7 +34,7 @@ export default function HealthPage() {
         setError("");
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
         setError("Something went wrong! Please try again.");
       });
   };
@@ -56,7 +56,7 @@ export default function HealthPage() {
       await AsyncStorage.setItem("bmiHistory", JSON.stringify(updatedHistory));
       setHistory(updatedHistory);
     } catch (error) {
-      console.error("Error saving to local storage:", error);
+      // console.error("Error saving to local storage:", error);
     }
   };
 
@@ -69,7 +69,7 @@ export default function HealthPage() {
           : [];
         setHistory(parsedHistory);
       } catch (error) {
-        console.error("Error loading from local storage:", error);
+        // console.error("Error loading from local storage:", error);
       }
     };
 

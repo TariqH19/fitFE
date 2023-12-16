@@ -17,12 +17,12 @@ export default function UserInfo() {
           decode(tokenArray[1].replace(/-/g, "+").replace(/_/g, "/"))
         );
         setUser(decodedToken);
-        console.log("Decoded Token:", decodedToken);
+        // console.log("Decoded Token:", decodedToken);
       } else {
-        console.error("Invalid token format:", session);
+        // console.error("Invalid token format:", session);
       }
     } else {
-      console.warn("No session found");
+      // console.warn("No session found");
     }
   }, [session]);
 

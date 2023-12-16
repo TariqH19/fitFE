@@ -61,10 +61,10 @@ export default function SplitPage() {
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Split edited:", editedSplit);
+      // console.log("Split edited:", editedSplit);
     } catch (error: any) {
       // Handle the error (e.g., display an error message)
-      console.error("Error editing split:", error);
+      // console.error("Error editing split:", error);
       setError(error.response.data.errors.name.message);
     }
   };
@@ -75,12 +75,12 @@ export default function SplitPage() {
       const addedSplit = await addSplits({ ...form, user: userId }, session);
       setIsModalVisible(false);
       setSplit([...split, addedSplit] as any);
-      console.log("Split added:", addedSplit);
+      // console.log("Split added:", addedSplit);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error adding split:", error);
+      // console.error("Error adding split:", error);
     }
   };
 
@@ -95,7 +95,7 @@ export default function SplitPage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         const { splits, workout } = response.data;
         setSplit(splits);
         setWorkouts(workout);

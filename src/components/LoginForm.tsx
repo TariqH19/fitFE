@@ -6,11 +6,10 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native-paper";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useSession } from "../contexts/AuthContext";
 import { useNavigation } from "@react-navigation/native";
-import { Linking } from "react-native";
 
 interface FormType {
   email?: string;
@@ -22,55 +21,15 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn }: any = useSession();
   const theme = useTheme();
-  const [authToken, setAuthToken] = useState<string | null>(null);
-
   const [form, setForm] = useState<FormType>({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const handleOpenURL = async (event: { url: string }) => {
-      console.log("Received URL:", event.url);
-
-      const token = event.url.split("token=")[1];
-      console.log("Extracted Token:", token);
-
-      if (token) {
-        // Decode the URI-encoded token
-        const decodedToken = decodeURIComponent(token);
-        console.log("Decoded Token:", decodedToken);
-
-        // Store the token in the state variable
-        setAuthToken(decodedToken);
-
-        try {
-          // Use the decoded token to sign in
-          await signIn(decodedToken);
-          console.log("Sign-in successful");
-          navigation.navigate("(home)" as never);
-        } catch (error) {
-          // Handle any errors during sign-in
-          console.error("Error during sign-in:", error);
-          // You might want to show an error message to the user here
-        }
-      }
-    };
-
-    Linking.addEventListener("url", handleOpenURL);
-
-    // Cleanup the event listener when the component unmounts
-    return () => Linking.removeEventListener("url", handleOpenURL);
-  }, [signIn, navigation]);
-
-  const handleLink = () => {
-    Linking.openURL("http://localhost:3000/auth/");
-  };
-
   const handleClick = () => {
     setIsLoading(true);
-    console.log("clicked", form);
+    // console.log("clicked", form);
 
     axios
       .post("https://gym-api-omega.vercel.app/api/users/login", form, {
@@ -80,7 +39,7 @@ export default function LoginForm() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         signIn(response.data.token);
         navigation.navigate("(home)" as never);
 
@@ -144,16 +103,6 @@ export default function LoginForm() {
             Submit
           </Button>
         )}
-        <Text style={{ margin: 12, color: "black" }}>OR</Text>
-        <Button
-          style={{
-            margin: 12,
-            backgroundColor: "black",
-          }}
-          textColor="white"
-          onPress={handleLink}>
-          Login with Google
-        </Button>
       </View>
     </>
   );

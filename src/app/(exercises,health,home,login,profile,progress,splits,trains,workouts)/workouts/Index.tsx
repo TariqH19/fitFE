@@ -58,10 +58,10 @@ export default function WorkoutPage() {
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Workout edited:", editedWorkout);
+      // console.log("Workout edited:", editedWorkout);
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error editing workout:", error);
+      // console.error("Error editing workout:", error);
     }
   };
 
@@ -71,12 +71,12 @@ export default function WorkoutPage() {
       const addedWorkout = await addWorkout({ ...form, user: userId }, session);
       setIsModalVisible(false);
       setWorkouts([...workouts, addedWorkout] as any);
-      console.log("Workout added:", addedWorkout);
+      // console.log("Workout added:", addedWorkout);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error adding workout:", error);
+      // console.error("Error adding workout:", error);
     }
   };
 
@@ -92,7 +92,7 @@ export default function WorkoutPage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         const { workout, exercise } = response.data;
         setWorkouts(workout);
         setExercises(exercise);

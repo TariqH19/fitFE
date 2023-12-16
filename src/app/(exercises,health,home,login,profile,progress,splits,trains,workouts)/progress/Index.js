@@ -39,7 +39,7 @@ const WeightTracker = () => {
           setCurrentWeight({ weight: savedWeights[0].weight || 0 });
         }
       } catch (error) {
-        console.error("Error fetching weights:", error);
+        // console.error("Error fetching weights:", error);
         setError("Error fetching weights. Please try again.");
       }
     };
@@ -97,7 +97,7 @@ const WeightTracker = () => {
       setWeights((prevWeights) => [...prevWeights, response.data]);
       setCurrentWeight({ weight: response.data.weight });
     } catch (error) {
-      console.error("Error adding weight:", error);
+      // console.error("Error adding weight:", error);
       setError("Error adding weight. Please try again.");
     }
   };

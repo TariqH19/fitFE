@@ -30,7 +30,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
           setSessionData(storedSession);
         }
       } catch (error) {
-        console.error("Error loading session from storage:", error);
+        // console.error("Error loading session from storage:", error);
       } finally {
         setIsLoading(false);
       }

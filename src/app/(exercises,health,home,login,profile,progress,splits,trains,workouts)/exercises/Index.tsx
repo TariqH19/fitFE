@@ -55,10 +55,10 @@ export default function ExercisePage() {
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Exercise edited:", editedExercise);
+      // console.log("Exercise edited:", editedExercise);
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error editing exercise:", error);
+      // console.error("Error editing exercise:", error);
     }
   };
 
@@ -71,12 +71,12 @@ export default function ExercisePage() {
       );
       setIsModalVisible(false);
       setExercises([...exercises, addedExercise] as any);
-      console.log("Exercise added:", addedExercise);
+      // console.log("Exercise added:", addedExercise);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       // Handle the error (e.g., display an error message)
-      console.error("Error adding exercise:", error);
+      // console.error("Error adding exercise:", error);
       setError(error.response.data.errors.name.message);
     }
   };
@@ -92,7 +92,7 @@ export default function ExercisePage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setExercises(response.data);
         setLoading(false);
       });

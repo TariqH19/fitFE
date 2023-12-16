@@ -63,7 +63,7 @@ export default function RegisterForm() {
             }
           )
           .then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
             signIn(response.data.token);
             navigation.navigate("(home)" as never);
 

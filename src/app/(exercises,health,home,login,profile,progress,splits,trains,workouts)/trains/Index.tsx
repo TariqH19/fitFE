@@ -59,10 +59,10 @@ export default function TrainPage() {
 
       // Close the modal after editing
       setIsModalVisible(false);
-      console.log("Train edited:", editedTrain);
+      // console.log("Train edited:", editedTrain);
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error editing train:", error);
+      // console.error("Error editing train:", error);
     }
   };
 
@@ -72,12 +72,12 @@ export default function TrainPage() {
       const addedTrain = await addSession({ ...form, user: userId }, session);
       setIsModalVisible(false);
       setTrain([...train, addedTrain] as any);
-      console.log("Train added:", addedTrain);
+      // console.log("Train added:", addedTrain);
 
       // Reset the form or perform any other actions after successful submission
     } catch (error: any) {
       setError(error.response.data.errors.name.message);
-      console.error("Error adding train:", error);
+      // console.error("Error adding train:", error);
     }
   };
 
@@ -92,7 +92,7 @@ export default function TrainPage() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         const { workoutexercise, workout } = response.data;
         setTrain(workoutexercise);
         setWorkouts(workout);

@@ -27,7 +27,7 @@ export default function DeleteBtn({
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         if (deleteCallback) deleteCallback(_id);
       })
       .catch((e) => {

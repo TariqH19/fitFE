@@ -22,6 +22,7 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn }: any = useSession();
   const theme = useTheme();
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const [form, setForm] = useState<FormType>({
     email: "",
@@ -41,6 +42,9 @@ export default function LoginForm() {
         const decodedToken = decodeURIComponent(token);
         console.log("Decoded Token:", decodedToken);
 
+        // Store the token in the state variable
+        setAuthToken(decodedToken);
+
         try {
           // Use the decoded token to sign in
           await signIn(decodedToken);
@@ -56,7 +60,8 @@ export default function LoginForm() {
 
     Linking.addEventListener("url", handleOpenURL);
 
-    // return () => Linking.removeEventListener("url", handleOpenURL);
+    // Cleanup the event listener when the component unmounts
+    return () => Linking.removeEventListener("url", handleOpenURL);
   }, [signIn, navigation]);
 
   const handleLink = () => {
@@ -140,7 +145,7 @@ export default function LoginForm() {
           </Button>
         )}
         <Text style={{ margin: 12, color: "black" }}>OR</Text>
-        {/* <Button
+        <Button
           style={{
             margin: 12,
             backgroundColor: "black",
@@ -148,7 +153,7 @@ export default function LoginForm() {
           textColor="white"
           onPress={handleLink}>
           Login with Google
-        </Button> */}
+        </Button>
       </View>
     </>
   );

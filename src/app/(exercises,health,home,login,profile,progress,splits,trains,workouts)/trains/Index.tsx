@@ -129,7 +129,7 @@ export default function TrainPage() {
           </Button>
 
           {!train.length && !loading && (
-            <Text style={{ textAlign: "center" }}>
+            <Text style={{ textAlign: "center", color: "black" }}>
               No sessions found. Add a session to get started.
             </Text>
           )}

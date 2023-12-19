@@ -136,7 +136,7 @@ export default function SplitPage() {
           </Button>
 
           {!split.length && !loading && (
-            <Text style={{ textAlign: "center" }}>
+            <Text style={{ textAlign: "center", color: "black" }}>
               You have no splits yet. Add one above!
             </Text>
           )}

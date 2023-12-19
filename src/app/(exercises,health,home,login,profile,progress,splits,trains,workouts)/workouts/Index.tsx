@@ -129,7 +129,7 @@ export default function WorkoutPage() {
           </Button>
 
           {!workouts.length && !loading && (
-            <Text style={{ textAlign: "center" }}>
+            <Text style={{ textAlign: "center", color: "black" }}>
               You have no workouts yet. Add one above.
             </Text>
           )}

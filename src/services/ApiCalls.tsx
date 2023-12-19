@@ -17,7 +17,7 @@ export async function addExercise(
       }
     );
     // console.log("Exercise added successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error adding exercise:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -41,7 +41,7 @@ export async function editExercise(
       }
     );
     // console.log("Exercise Edited successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error editing exercise:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -64,7 +64,7 @@ export async function addWorkout(
       }
     );
     // console.log("Workout added successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error adding workout:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -88,7 +88,7 @@ export async function editWorkout(
       }
     );
     // console.log("Workout Edited successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error editing workout:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -111,7 +111,7 @@ export async function addSplits(
       }
     );
     // console.log("Split added successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error adding Split:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -135,7 +135,7 @@ export async function editSplit(
       }
     );
     // console.log("Split Edited successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error editing split:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -158,7 +158,7 @@ export async function addSession(
       }
     );
     // console.log("Session added successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error adding Session:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -182,7 +182,7 @@ export async function editSession(
       }
     );
     // console.log("Session Edited successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error editing session:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -205,7 +205,7 @@ export async function addWeight(
       }
     );
     // console.log("Weight added successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error adding Weight:", error);
     throw error; // Propagate the error to handle it in the calling component
@@ -229,7 +229,7 @@ export async function editWeight(
       }
     );
     // console.log("Weight Edited successfully:", response.data);
-    return response.data; // You can return additional data if needed
+    return response.data;
   } catch (error) {
     // console.error("Error editing weight:", error);
     throw error; // Propagate the error to handle it in the calling component

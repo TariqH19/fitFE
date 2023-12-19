@@ -16,6 +16,7 @@ import { addExercise, editExercise } from "../../../services/ApiCalls";
 import UserInfo from "../../../services/User";
 import DeleteBtn from "../../../components/DeleteBtn";
 import { ActivityIndicator } from "react-native-paper";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function ExercisePage() {
   const [exercises, setExercises] = useState([] as any);
@@ -120,106 +121,108 @@ export default function ExercisePage() {
   return (
     <>
       <Stack.Screen options={{ headerTitle: `Exercises` }} />
-      <View style={{ flex: 1, gap: 10, padding: 16 }}>
-        <Button mode="contained" onPress={() => toggleModal(null)}>
-          Add Exercise
-        </Button>
+      <ScrollView>
+        <View style={{ flex: 1, gap: 10, padding: 16 }}>
+          <Button mode="contained" onPress={() => toggleModal(null)}>
+            Add Exercise
+          </Button>
 
-        {!exercises.length && !loading && (
-          <Text style={{ textAlign: "center", color: "black" }}>
-            You have no exercises. Add one above.
-          </Text>
-        )}
+          {!exercises.length && !loading && (
+            <Text style={{ textAlign: "center", color: "black" }}>
+              You have no exercises. Add one above.
+            </Text>
+          )}
 
-        {loading && <ActivityIndicator />}
+          {loading && <ActivityIndicator />}
 
-        {exercises.map((exercise: any) => (
-          <Card style={{ backgroundColor: "#F1F7FF" }} key={exercise._id}>
-            <Card.Content>
-              <Text style={{ color: "black" }}>{exercise.name}</Text>
-              <Text style={{ color: "black" }}>{exercise.muscle_group}</Text>
-              <Text style={{ color: "black" }}>{exercise.notes}</Text>
-            </Card.Content>
-            <Card.Actions>
-              <Button
-                textColor="black"
-                style={{ margin: 12 }}
-                onPress={() => toggleModal(exercise)}>
-                Edit
-              </Button>
-              <DeleteBtn
-                resource="exercises"
-                _id={exercise._id}
-                deleteCallback={(id) =>
-                  setExercises(
-                    exercises.filter((e: { _id: string }) => e._id !== id)
-                  )
-                }
-              />
-            </Card.Actions>
-          </Card>
-        ))}
-
-        <Portal>
-          <Modal
-            style={{ padding: 16, marginTop: -100 }}
-            visible={isModalVisible}
-            onDismiss={() => setIsModalVisible(false)}>
-            <Card style={{ backgroundColor: "#CDD3DB" }}>
-              <Card.Title
-                titleStyle={{ color: "black" }}
-                title={selectedExercise ? "Edit Exercise" : "Add Exercise"}
-              />
-              <View>
-                <TextInput
-                  mode="outlined"
+          {exercises.map((exercise: any) => (
+            <Card style={{ backgroundColor: "#F1F7FF" }} key={exercise._id}>
+              <Card.Content>
+                <Text style={{ color: "black" }}>{exercise.name}</Text>
+                <Text style={{ color: "black" }}>{exercise.muscle_group}</Text>
+                <Text style={{ color: "black" }}>{exercise.notes}</Text>
+              </Card.Content>
+              <Card.Actions>
+                <Button
                   textColor="black"
-                  placeholderTextColor="black"
-                  style={{
-                    backgroundColor: "#F1F7FF",
-                  }}
-                  placeholder="Exercise Name"
-                  value={form.name}
-                  onChangeText={(text) => setForm({ ...form, name: text })}
-                />
-                <TextInput
-                  mode="outlined"
-                  textColor="black"
-                  placeholderTextColor="black"
-                  style={{
-                    backgroundColor: "#F1F7FF",
-                  }}
-                  placeholder="Muscle Group"
-                  value={form.muscle_group}
-                  onChangeText={(text) =>
-                    setForm({ ...form, muscle_group: text })
+                  style={{ margin: 12 }}
+                  onPress={() => toggleModal(exercise)}>
+                  Edit
+                </Button>
+                <DeleteBtn
+                  resource="exercises"
+                  _id={exercise._id}
+                  deleteCallback={(id) =>
+                    setExercises(
+                      exercises.filter((e: { _id: string }) => e._id !== id)
+                    )
                   }
                 />
-                <TextInput
-                  mode="outlined"
-                  textColor="black"
-                  placeholderTextColor="black"
-                  style={{
-                    backgroundColor: "#F1F7FF",
-                  }}
-                  placeholder="Notes"
-                  value={form.notes}
-                  onChangeText={(text) => setForm({ ...form, notes: text })}
-                />
-              </View>
-              <Text>
-                {error && <Text style={{ color: "red" }}>{error}</Text>}
-              </Text>
-
-              <Button
-                textColor="black"
-                onPress={selectedExercise ? handleEdit : handleAddExercise}>
-                {selectedExercise ? "Save" : "Add"}
-              </Button>
+              </Card.Actions>
             </Card>
-          </Modal>
-        </Portal>
-      </View>
+          ))}
+
+          <Portal>
+            <Modal
+              style={{ padding: 16, marginTop: -100 }}
+              visible={isModalVisible}
+              onDismiss={() => setIsModalVisible(false)}>
+              <Card style={{ backgroundColor: "#CDD3DB" }}>
+                <Card.Title
+                  titleStyle={{ color: "black" }}
+                  title={selectedExercise ? "Edit Exercise" : "Add Exercise"}
+                />
+                <View>
+                  <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#F1F7FF",
+                    }}
+                    placeholder="Exercise Name"
+                    value={form.name}
+                    onChangeText={(text) => setForm({ ...form, name: text })}
+                  />
+                  <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#F1F7FF",
+                    }}
+                    placeholder="Muscle Group"
+                    value={form.muscle_group}
+                    onChangeText={(text) =>
+                      setForm({ ...form, muscle_group: text })
+                    }
+                  />
+                  <TextInput
+                    mode="outlined"
+                    textColor="black"
+                    placeholderTextColor="black"
+                    style={{
+                      backgroundColor: "#F1F7FF",
+                    }}
+                    placeholder="Notes"
+                    value={form.notes}
+                    onChangeText={(text) => setForm({ ...form, notes: text })}
+                  />
+                </View>
+                <Text>
+                  {error && <Text style={{ color: "red" }}>{error}</Text>}
+                </Text>
+
+                <Button
+                  textColor="black"
+                  onPress={selectedExercise ? handleEdit : handleAddExercise}>
+                  {selectedExercise ? "Save" : "Add"}
+                </Button>
+              </Card>
+            </Modal>
+          </Portal>
+        </View>
+      </ScrollView>
     </>
   );
 }

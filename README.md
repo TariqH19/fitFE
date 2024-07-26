@@ -1,5 +1,6 @@
 # Mobile fitness app
 
+NEW BRANCH FOR OLD APP
 A mobile fitness app where you can track your workouts
 
 ## Screenshots
